@@ -11,11 +11,10 @@ const langCodeArray = [
     name: "Engligh"
   },
   {
-    langCode: "ja",
-    name: "Japanese"
+    langCode: "ar",
+    name: "Arabic"
   }
 ]
-
 
 const TopHeader = () => {
 
@@ -32,11 +31,9 @@ const TopHeader = () => {
     setUrl(urlTemp);
   }, []);
 
-
   const [langCode, setLangCode] = useState('');
   const [LocalizationLabelsArray, setLocalizationLabelsArray] = useState([]);
   const handleLangCodeInSession = async (value) => {
-
     await setLanguageCodeInSession(value);
     await setLangCode(value);
 
@@ -61,9 +58,6 @@ const TopHeader = () => {
     dataOperationFunc().catch(console.error);
   }, [])
 
-
-
-
   return (
     <div className={`top-header ${url === "layout6" ? "top-header-inverse" : ""}`}>
       <div className="custom-container">
@@ -72,14 +66,11 @@ const TopHeader = () => {
             <div className="top-header-left">
               <div className="shpping-order">
                 <h6>
-                  
-              
                   {LocalizationLabelsArray.length > 0 ?
                       replaceLoclizationLabel(LocalizationLabelsArray, "free shipping on order over $99", "lbl_thead_freeship")
                       :
                       "free shipping on order over $99"
                     }
-                  
                   </h6>
               </div>
               <div className="app-link">
@@ -95,13 +86,11 @@ const TopHeader = () => {
                   </Link>
                 </h6>
                 <ul>
-
                   <li>
                     <a>
                       <i className="fa fa-android"></i>
                     </a>
                   </li>
-
                 </ul>
               </div>
             </div>
@@ -141,17 +130,15 @@ const TopHeader = () => {
                       <i className="fa fa-angle-down" aria-hidden="true"></i>
                     </DropdownToggle>
                     <ul className={`language-dropdown-open ${openLang ? "" : "open"}`}>
-
                       <li >
                         <a onClick={() => handleLangCodeInSession("en")} href="#">English</a>
                       </li>
                       <li>
-                        <a onClick={() => handleLangCodeInSession("ja")} href="#">Japanese</a>
+                        <a onClick={() => handleLangCodeInSession("ar")} href="#">Arabic</a>
                       </li>
                     </ul>
                   </Dropdown>
                 </div>
-
               </div>
             </div>
           </Col>
@@ -159,8 +146,6 @@ const TopHeader = () => {
       </div>
     </div>
   );
-
 }
-
 
 export default TopHeader;
