@@ -12,11 +12,9 @@ export const makeProductShortDescription = (inputString, length) => {
   } else {
     return "";
   }
-
 }
 
 export const makeAnyStringLengthShort = (inputString, length) => {
-
   length = parseInt(length) ?? 50;
 
   if (inputString != undefined && inputString != null && inputString.length > 0) {
@@ -25,8 +23,6 @@ export const makeAnyStringLengthShort = (inputString, length) => {
   } else {
     return "";
   }
-
-
 }
 
 
@@ -105,7 +101,6 @@ export const setProductDescriptionImagesUrl = (FullDescription) => {
         let replaceText = '<img src="' + adminPanelBaseURL + "content/commonImages/";
         FullDescription = FullDescription.replace('<img src="/content/commonImages/', replaceText);
       }
-
     }
   }
   catch (err) {

@@ -8,14 +8,13 @@ import { Link } from 'react-router-dom';
 const langCodeArray = [
   {
     langCode: "en",
-    name: "Engligh"
+    name: "English"
   },
   {
-    langCode: "ja",
-    name: "Japanese"
+    langCode: "ar",
+    name: "Arabic"
   }
 ]
-
 
 const TopHeader = () => {
 
@@ -32,11 +31,9 @@ const TopHeader = () => {
     setUrl(urlTemp);
   }, []);
 
-
   const [langCode, setLangCode] = useState('');
   const [LocalizationLabelsArray, setLocalizationLabelsArray] = useState([]);
   const handleLangCodeInSession = async (value) => {
-
     await setLanguageCodeInSession(value);
     await setLangCode(value);
 
@@ -61,28 +58,22 @@ const TopHeader = () => {
     dataOperationFunc().catch(console.error);
   }, [])
 
-
-
-
   return (
     <div className={`top-header ${url === "layout6" ? "top-header-inverse" : ""}`}>
       <div className="custom-container">
         <Row>
           <Col xl="5" md="7" sm="6">
             <div className="top-header-left">
-              <div className="shpping-order">
+              {/* <div className="shpping-order">
                 <h6>
-                  
-              
                   {LocalizationLabelsArray.length > 0 ?
                       replaceLoclizationLabel(LocalizationLabelsArray, "free shipping on order over $99", "lbl_thead_freeship")
                       :
                       "free shipping on order over $99"
                     }
-                  
                   </h6>
-              </div>
-              <div className="app-link">
+              </div> */}
+              {/* <div className="app-link">
                 <h6>
                   <Link to={`/${getLanguageCodeFromSession()}/become-seller`} id="lbl_thead_seller"
                     style={{ color: "inherit", textDecoration: "none" }}
@@ -95,20 +86,18 @@ const TopHeader = () => {
                   </Link>
                 </h6>
                 <ul>
-
                   <li>
                     <a>
                       <i className="fa fa-android"></i>
                     </a>
                   </li>
-
                 </ul>
-              </div>
+              </div> */}
             </div>
           </Col>
           <Col xl="7" md="5" sm="6">
             <div className="top-header-right">
-              <div className="top-menu-block">
+              {/* <div className="top-menu-block">
                 <ul>
                   <li>
                     <a href="#">gift cards</a>
@@ -132,7 +121,7 @@ const TopHeader = () => {
                     <a href="#">easy returns</a>
                   </li>
                 </ul>
-              </div>
+              </div> */}
               <div className="language-block">
                 <div className="language-dropdown">
                   <Dropdown isOpen={openLang} toggle={toggleLang}>
@@ -141,17 +130,15 @@ const TopHeader = () => {
                       <i className="fa fa-angle-down" aria-hidden="true"></i>
                     </DropdownToggle>
                     <ul className={`language-dropdown-open ${openLang ? "" : "open"}`}>
-
                       <li >
                         <a onClick={() => handleLangCodeInSession("en")} href="#">English</a>
                       </li>
                       <li>
-                        <a onClick={() => handleLangCodeInSession("ja")} href="#">Japanese</a>
+                        <a onClick={() => handleLangCodeInSession("ar")} href="#">Arabic</a>
                       </li>
                     </ul>
                   </Dropdown>
                 </div>
-
               </div>
             </div>
           </Col>
@@ -159,8 +146,6 @@ const TopHeader = () => {
       </div>
     </div>
   );
-
 }
-
 
 export default TopHeader;

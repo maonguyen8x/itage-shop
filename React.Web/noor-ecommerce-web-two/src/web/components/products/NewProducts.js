@@ -12,8 +12,6 @@ import GlobalEnums from "../../../helpers/GlobalEnums";
 import rootAction from "../../../stateManagment/actions/rootAction";
 import { LOADER_DURATION } from "../../../helpers/Constants";
 
-
-
 var settings = {
     arrows: true,
     dots: false,
@@ -57,10 +55,6 @@ var settings = {
     ],
 };
 
-
-
-
-
 const NewProducts = ({ effect }) => {
     const dispatch = useDispatch();
     const [activeTab, setActiveTab] = useState("new products");
@@ -93,22 +87,15 @@ const NewProducts = ({ effect }) => {
         TotalRecords: 0
     });
 
-
-
     const getNewProductsList = async (TabName) => {
-
         await setActiveTab(TabName);
         //--empty list of product
         await setProductsList([]);
 
         const headers = {
-
             Accept: 'application/json',
             'Content-Type': 'application/json',
-
         }
-
-
         const param = {
             requestParameters: {
                 PageNo: PaginationInfo.PageNo,
@@ -117,8 +104,6 @@ const NewProducts = ({ effect }) => {
                 recordValueJson: "[]",
             },
         };
-
-
 
         const response = await MakeApiCallAsync(Config.END_POINT_NAMES['GET_RECENTS_PRODUCTS_LIST'], null, param, headers, "POST", true);
         if (response != null && response.data != null) {
@@ -131,12 +116,8 @@ const NewProducts = ({ effect }) => {
                 ProductData = ProductData.concat(ProductData);
             }
             await setProductsList(ProductData);
-
-
         }
     }
-
-
 
     useEffect(() => {
         // declare the data fetching function
@@ -153,48 +134,33 @@ const NewProducts = ({ effect }) => {
             if (arryRespLocalization != null && arryRespLocalization != undefined && arryRespLocalization.length > 0) {
                 await setLocalizationLabelsArray(arryRespLocalization);
             }
-
-
-
-
-
         }
-
         //--start loader
         dispatch(rootAction.commonAction.setLoading(true));
 
         // call the function
         dataOperationInUseEffect().catch(console.error);
-
         //--stop loader
         setTimeout(() => {
             dispatch(rootAction.commonAction.setLoading(false));
         }, LOADER_DURATION);
 
     }, [])
-
-
-
     return (
         <>
-
             <section className="section-pt-space">
                 <div className="tab-product-main">
                     <div className="tab-prodcut-contain">
                         <Nav tabs>
-
-
                             {collection && collection?.map((c, i) => (
                                 <NavItem key={i}>
                                     <NavLink className={activeTab === c.nameEn ? "active" : ""} onClick={() => getNewProductsList(c.nameEn)}>
                                         {
-
-                                            langCode != null && langCode == Config.LANG_CODES_ENUM["Japanese"]
+                                            langCode != null && langCode == Config.LANG_CODES_ENUM["Arabic"]
                                                 ?
                                                 c.nameAr
                                                 :
                                                 c.nameEn
-
                                         }
                                     </NavLink>
                                 </NavItem>
@@ -211,7 +177,6 @@ const NewProducts = ({ effect }) => {
                                 <TabPane tabId={activeTab}>
                                     <div className="product product-slide-6 product-m no-arrow">
                                         <div>
-
                                             {!ProductsList || ProductsList.length < 0 ? (
                                                 <Skeleton />
                                             ) : (
@@ -224,16 +189,11 @@ const NewProducts = ({ effect }) => {
                                                                     item={itm}
                                                                     layout=""
                                                                     ProductDetailPageForceUpload={false}
-
                                                                 />
                                                             </div>
                                                         ))}
                                                 </Slider>
                                             )}
-
-
-
-
                                         </div>
                                     </div>
                                 </TabPane>

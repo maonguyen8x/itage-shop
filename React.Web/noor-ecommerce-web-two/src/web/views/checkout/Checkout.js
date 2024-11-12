@@ -55,14 +55,11 @@ const Checkout = () => {
     const [paypalOrderID, setPaypalOrderID] = useState(false);
     const [LocalizationLabelsArray, setLocalizationLabelsArray] = useState([]);
 
-
-
     const loginUserDataJson = useSelector(state => state.userReducer.user);
     const loginUser = JSON.parse(loginUserDataJson ?? "{}");
 
     const cartJsonDataSession = useSelector(state => state.cartReducer.cartItems);
     const cartItemsSession = JSON.parse(cartJsonDataSession ?? "[]");
-
 
     if (loginUser == undefined || loginUser.UserID == undefined || loginUser.UserID < 1) {
         navigate('/' + getLanguageCodeFromSession() + '/login');
@@ -74,20 +71,15 @@ const Checkout = () => {
     }
 
     const GetCouponCodeInfo = async () => {
-
         if (IsCouponCodeApplied) {
             showInfoMsg('Coupon code is already applied!');
             return false;
         }
 
-
         let isValid = validateAnyFormField('Coupon Code', CouponCode, 'text', null, 30, true);
         if (isValid == false) {
             return false;
         }
-
-
-
         const headersCoupon = {
             Accept: 'application/json',
             'Content-Type': 'application/json',
@@ -100,10 +92,7 @@ const Checkout = () => {
             },
         };
 
-
         const couponResponse = await MakeApiCallAsync(Config.END_POINT_NAMES['GET_COUPON_CODE_DISCOUNT'], Config['COMMON_CONTROLLER_SUB_URL'], paramCoupon, headersCoupon, "POST", true);
-
-
         if (couponResponse != null && couponResponse.data != null) {
 
             let copounData = JSON.parse(couponResponse.data.data);
@@ -114,16 +103,10 @@ const Checkout = () => {
             } else {
                 showErrorMsg('Invalid coupon code!');
             }
-
         }
-
-
-
     }
 
     const handleCheckoutOnSubmit = async (e) => {
-        
-
         try {
             e.preventDefault();
 
@@ -139,18 +122,13 @@ const Checkout = () => {
             else if (PaymentMethod === process.env.REACT_APP_CASH_ON_DELIVERY_PAYMENT_METHOD) {
                 let isYes = window.confirm("Do you really want place order?");
                 if (isYes) {
-
                     //--start loader
                     dispatch(rootAction.commonAction.setLoading(true));
-
-
                     PlaceAndConfirmCustomerOrder(null);
-
                     //--stop loader
                     setTimeout(() => {
                         dispatch(rootAction.commonAction.setLoading(false));
                     }, LOADER_DURATION);
-
                 }
             }
         } catch (err) {
@@ -166,22 +144,14 @@ const Checkout = () => {
                 dispatch(rootAction.commonAction.setLoading(false));
             }, LOADER_DURATION);
         }
-
-
-
     }
 
-
     const PlaceAndConfirmCustomerOrder = async (StripPaymentToken, payPalOrderConfirmJson = "{}") => {
-
         try {
-
             const headersStrip = {
                 Accept: 'application/json',
                 'Content-Type': 'application/json',
-
             }
-
 
             const paramSrip = {
                 requestParameters: {
@@ -195,8 +165,6 @@ const Checkout = () => {
                     recordValueJson: "[]",
                 },
             };
-
-
 
             const stripServerResponse = await MakeApiCallAsync(Config.END_POINT_NAMES['POST_CUSTOMER_ORDER'], Config['COMMON_CONTROLLER_SUB_URL'], paramSrip, headersStrip, "POST", true);
             if (stripServerResponse != null && stripServerResponse.data != null && stripServerResponse.status == 200) {
@@ -403,8 +371,6 @@ const Checkout = () => {
 
     return (
         <>
-
-
             <Helmet>
                 <title>{siteTitle} - Checkout</title>
                 <meta name="description" content={siteTitle + " - Checkout"} />

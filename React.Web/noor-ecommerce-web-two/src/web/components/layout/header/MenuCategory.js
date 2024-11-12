@@ -122,8 +122,6 @@ const MenuCategory = () => {
                                     <i className="fa fa-angle-left"></i>Back
                                 </a>
                             </li>
-
-
                             {PopularCategoriesList && PopularCategoriesList?.filter(x => x.ParentCategoryID != null && x.ParentCategoryID != undefined)?.map((item, i) => (
                                 <li key={i}>
                                     <Link to="#"
@@ -132,13 +130,12 @@ const MenuCategory = () => {
                                         }}
                                     >
                                         <Media src={adminPanelBaseURL + item.AttachmentURL} alt="category-product" className="img-fluid" style={{ width: "39px", height: "39px" }} />
-
                                         {
-                                            langCode != null && langCode == Config.LANG_CODES_ENUM["Japanese"]
+                                            langCode != null && langCode == Config.LANG_CODES_ENUM["Arabic"]
                                                 ?
                                                 (item.LocalizationJsonData != null && item.LocalizationJsonData.length > 0
                                                     ?
-                                                    makeAnyStringLengthShort(item.LocalizationJsonData?.find(l => l.langId == Config.LANG_CODES_IDS_ENUM["Japanese"])?.text, 22)
+                                                    makeAnyStringLengthShort(item.LocalizationJsonData?.find(l => l.langId == Config.LANG_CODES_IDS_ENUM["Arabic"])?.text, 22)
                                                     :
                                                     makeAnyStringLengthShort(item.Name, 17)
                                                 )
@@ -149,21 +146,12 @@ const MenuCategory = () => {
                                     </Link>
                                 </li>
                             ))}
-
-
-
-
-
-
-
                         </ul>
                     </div>
                 </div>
             </div>
         </>
     );
-
 }
-
 
 export default MenuCategory;

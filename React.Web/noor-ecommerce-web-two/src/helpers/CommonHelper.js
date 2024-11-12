@@ -7,29 +7,19 @@ export const RedirectToWhatsAppPage = () => {
     window.open('https://wa.me/923128545494', '_blank');
 }
 
-
-
 export const GetDefaultCurrencySymbol = () => {
     let DefaultCurrencySymbol = "$";  //--USD is consider as default if there is no setting in appsetting.json file
     DefaultCurrencySymbol = Config.APP_SETTING['DefaultCurrencySymbol'] ?? "$";
     return DefaultCurrencySymbol;
-
-
 }
 
 export const GetDefaultCurrencyCode = () => {
     let DefaultCurrencyCode = "USD";  //--USD is consider as default if there is no setting in appsetting.json file
     DefaultCurrencyCode = Config.APP_SETTING['DefaultCurrencyCode'] ?? "USD";
     return DefaultCurrencyCode;
-
-
 }
 
-
-
 export const GetTokenForHeader = async () => {
-
-
     try {
         let Token = "";
 
@@ -45,12 +35,9 @@ export const GetTokenForHeader = async () => {
         console.error(err.message);
         return "";
     }
-
 }
 
 export const GetUserIdForHeader = async () => {
-
-
     try {
         let UserID = "";
 
@@ -71,8 +58,6 @@ export const GetUserIdForHeader = async () => {
 }
 
 export const setLanguageCodeInSession = async (LangCode) => {
-
-
     try {
         let lCode = LangCode ?? "en";
         localStorage.setItem("langCode", lCode);
@@ -80,7 +65,6 @@ export const setLanguageCodeInSession = async (LangCode) => {
     catch (err) {
         console.error(err.message);
     }
-
 }
 
 export const getLanguageCodeFromSession = () => {
@@ -101,15 +85,9 @@ export const getLanguageCodeFromSession = () => {
 }
 
 export const GetLocalizationControlsJsonDataForScreen = async (entityId, htmlElementId = null) => {
-
     let responseArray = [];
-
-
     try {
-
         let languageCode = getLanguageCodeFromSession();
-
-
         if (languageCode == undefined || languageCode == null || languageCode == "") {
             return responseArray;
         }
@@ -125,9 +103,7 @@ export const GetLocalizationControlsJsonDataForScreen = async (entityId, htmlEle
         const headerLocalization = {
             Accept: 'application/json',
             'Content-Type': 'application/json',
-
         }
-
 
         const paramLocalization = {
             requestParameters: {
@@ -137,30 +113,20 @@ export const GetLocalizationControlsJsonDataForScreen = async (entityId, htmlEle
             },
         };
 
-
-
         const localizationResponse = await MakeApiCallAsync(Config.END_POINT_NAMES['GET_LOCALIZATION_CSTM_PORTAL'], Config['COMMON_CONTROLLER_SUB_URL'], paramLocalization, headerLocalization, "POST", true);
         if (localizationResponse != null && localizationResponse.data != null) {
-
             let finalData = JSON.parse(localizationResponse.data.data);
             responseArray = finalData.labelsJsonData;
-
         }
-
     } catch (error) {
         console.log(error.message);
-
     }
     return responseArray;
 }
 
-
 export const replaceLoclizationLabel = (labelsJsonData, defaultTxt, labelHtmlId) => {
-
     let labelTxt = "";
     try {
-
-
         if (labelsJsonData == null || labelsJsonData == undefined || labelsJsonData.length == 0) {
             return (defaultTxt);
         }
@@ -172,9 +138,7 @@ export const replaceLoclizationLabel = (labelsJsonData, defaultTxt, labelHtmlId)
         console.error(err.message);
         labelTxt = defaultTxt;
     }
-
     return (labelTxt);
-
 
     // try {
     //     if (htmlElementId == null || htmlElementId == undefined) { //-- if htmlElementId is null, then its mean to run for whole body
@@ -203,7 +167,6 @@ export const replaceLoclizationLabel = (labelsJsonData, defaultTxt, labelHtmlId)
     //     console.error(err.message);
 
     // }
-
 }
 
 

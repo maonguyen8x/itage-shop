@@ -19,12 +19,11 @@ function App() {
     const [langCode, setLangCode] = useState('en');
 
     useEffect(() => {
-
         try {
             let lnCode = getLanguageCodeFromSession();
             setLangCode(lnCode);
-            if (langCode == Config.LANG_CODES_ENUM["Japanese"]) {
-                document.documentElement.lang = Config.LANG_CODES_ENUM["Japanese"];
+            if (langCode == Config.LANG_CODES_ENUM["Arabic"]) {
+                document.documentElement.lang = Config.LANG_CODES_ENUM["Arabic"];
                 if (document.body?.classList.contains("ltr")) {
                     document.body.classList.add("rtl");
                     document.body.classList.remove("ltr");
@@ -34,24 +33,16 @@ function App() {
                 document.body.classList.add("ltr");
                 document.body.classList.remove("rtl");
             }
-
-
         } catch (error) {
             console.error('An error occurred:', error.message);
             document.documentElement.lang = Config.LANG_CODES_ENUM["English"];
         }
-
     }, [langCode]);
-
-
 
   return (
       <Provider store={reduxStore}>
           <PersistGate loading={null} persistor={persistor}>
-
               <RouteConfig />
-              
-
           </PersistGate>
       </Provider>
 

@@ -84,11 +84,8 @@ const MenuBar = (props) => {
             dispatch(rootAction.commonAction.setLoading(false));
         }, LOADER_DURATION);
     }, [])
-
-
     return (
         <>
-
             {path !== "/Layouts/layout3" && (
                 <li>
                     <div
@@ -103,8 +100,6 @@ const MenuBar = (props) => {
                     </div>
                 </li>
             )}
-
-
 
             {/* {menuData.map((menuItem, i) => {
                 return (

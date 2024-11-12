@@ -174,38 +174,33 @@ const SearchHeader = () => {
                                                     {PopularCategoriesList && PopularCategoriesList?.filter(x => x.ParentCategoryID != null && x.ParentCategoryID != undefined)?.map((item, i) => (
                                                         <DropdownItem onClick={(e) => hangleCategory(item.CategoryID, makeProductShortDescription(
 
-                                                            (langCode != null && langCode == Config.LANG_CODES_ENUM["Japanese"]
+                                                            (langCode != null && langCode == Config.LANG_CODES_ENUM["Arabic"]
                                                                 ?
                                                                 (item.LocalizationJsonData != null && item.LocalizationJsonData.length > 0
                                                                     ?
-                                                                    makeAnyStringLengthShort(item.LocalizationJsonData?.find(l => l.langId == Config.LANG_CODES_IDS_ENUM["Japanese"])?.text, 14)
+                                                                    makeAnyStringLengthShort(item.LocalizationJsonData?.find(l => l.langId == Config.LANG_CODES_IDS_ENUM["Arabic"])?.text, 14)
                                                                     :
                                                                     makeAnyStringLengthShort(item.Name, 14)
                                                                 )
-
                                                                 :
                                                                 makeAnyStringLengthShort(item.Name, 14)
                                                             )
 
                                                             , 14))}>
-
                                                             {
-                                                                langCode != null && langCode == Config.LANG_CODES_ENUM["Japanese"]
+                                                                langCode != null && langCode == Config.LANG_CODES_ENUM["Arabic"]
                                                                     ?
                                                                     (item.LocalizationJsonData != null && item.LocalizationJsonData.length > 0
                                                                         ?
-                                                                        makeAnyStringLengthShort(item.LocalizationJsonData?.find(l => l.langId == Config.LANG_CODES_IDS_ENUM["Japanese"])?.text, 17)
+                                                                        makeAnyStringLengthShort(item.LocalizationJsonData?.find(l => l.langId == Config.LANG_CODES_IDS_ENUM["Arabic"])?.text, 17)
                                                                         :
                                                                         makeAnyStringLengthShort(item.Name, 17)
                                                                     )
-
                                                                     :
                                                                     makeAnyStringLengthShort(item.Name, 17)
                                                             }
                                                         </DropdownItem>
                                                     ))}
-
-
                                                 </DropdownMenu>
                                             </ButtonDropdown>
                                         </InputGroup>
@@ -253,8 +248,6 @@ const SearchHeader = () => {
             </Container>
         </>
     );
-
 }
-
 
 export default SearchHeader;

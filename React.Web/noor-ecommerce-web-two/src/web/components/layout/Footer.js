@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Row, Col, Container, Media } from "reactstrap";
-import logoImage from '../../../resources/custom/images/noor_shop_logo_3.jpg';
+import logoImage from '../../../resources/custom/images/ITage_Shop_logo.png';
 import SubscribeNewsLetter from "../shared/SubscribeNewsLetter";
 import { useSelector, useDispatch } from 'react-redux';
 import Config from '../../../helpers/Config';
@@ -362,7 +362,7 @@ const Footer = ({ layoutLogo }) => {
             <Col xs="12">
               <div className="sub-footer-contain">
                 <p>
-                  <span>2022 - 23 </span>copy right by nooshop powered by noorshop
+                  <span>2024 </span>copy right by Mao Nguyen powered by ITage Shop
                 </p>
               </div>
             </Col>

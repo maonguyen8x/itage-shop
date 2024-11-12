@@ -69,7 +69,6 @@ const PopularCategories = () => {
   useEffect(() => {
     // declare the data fetching function
     const getPopularCategories = async () => {
-
       //--Get language code
       let lnCode = getLanguageCodeFromSession();
       await setLangCode(lnCode);
@@ -81,8 +80,6 @@ const PopularCategories = () => {
         'Content-Type': 'application/json',
 
       }
-
-
       const param = {
         requestParameters: {
           PageNo: 1,
@@ -91,20 +88,15 @@ const PopularCategories = () => {
         },
       };
 
-
       const response = await MakeApiCallAsync(Config.END_POINT_NAMES['GET_POPULAR_CATEGORIES'], null, param, headers, "POST", true);
       if (response != null && response.data != null) {
         setPopularCategories(JSON.parse(response.data.data));
-
       }
-
       //-- Get website localization data
       let arryRespLocalization = await GetLocalizationControlsJsonDataForScreen(GlobalEnums.Entities["PopularCategories"], null);
       if (arryRespLocalization != null && arryRespLocalization != undefined && arryRespLocalization.length > 0) {
         await setLocalizationLabelsArray(arryRespLocalization);
       }
-
-
     }
 
     // call the function
@@ -113,7 +105,6 @@ const PopularCategories = () => {
 
   return (
     <>
-
       {
         PopularCategoriesList != undefined && PopularCategoriesList != null && PopularCategoriesList.length > 0
           ?
@@ -141,50 +132,39 @@ const PopularCategories = () => {
                                   <Media src={adminPanelBaseURL + item.AttachmentURL} alt="category"
                                     style={{ width: "100%", height: "100%", objectFit: "cover" }} className=""
                                     title={
-                                      langCode != null && langCode == Config.LANG_CODES_ENUM["Japanese"]
+                                      langCode != null && langCode == Config.LANG_CODES_ENUM["Arabic"]
                                         ?
                                         (item.LocalizationJsonData != null && item.LocalizationJsonData.length > 0
                                           ?
-                                          makeAnyStringLengthShort(item.LocalizationJsonData?.find(l => l.langId == Config.LANG_CODES_IDS_ENUM["Japanese"])?.text, 22)
+                                          makeAnyStringLengthShort(item.LocalizationJsonData?.find(l => l.langId == Config.LANG_CODES_IDS_ENUM["Arabic"])?.text, 22)
                                           :
                                           makeAnyStringLengthShort(item.Name, 22)
                                         )
-
                                         :
                                         makeAnyStringLengthShort(item.Name, 22)
                                     }
-
                                   />
                                 </div>
                                 <div>
                                   <div className="btn-rounded">
-
                                     {(() => {
-
-
                                       let allProductsUrl = `/${getLanguageCodeFromSession()}/all-products/${item.CategoryID ?? 0}/${replaceWhiteSpacesWithDashSymbolInUrl(item.Name)}`
                                       console.log(allProductsUrl);
-
                                       return (
                                         <>
                                           <Link to={allProductsUrl} style={{ color: 'inherit', textDecoration: 'none' }}>
-
                                             {
-
-                                              langCode != null && langCode == Config.LANG_CODES_ENUM["Japanese"]
+                                              langCode != null && langCode == Config.LANG_CODES_ENUM["Arabic"]
                                                 ?
                                                 (item.LocalizationJsonData != null && item.LocalizationJsonData.length > 0
                                                   ?
-                                                  makeAnyStringLengthShort(item.LocalizationJsonData?.find(l => l.langId == Config.LANG_CODES_IDS_ENUM["Japanese"])?.text, 22)
+                                                  makeAnyStringLengthShort(item.LocalizationJsonData?.find(l => l.langId == Config.LANG_CODES_IDS_ENUM["Arabic"])?.text, 22)
                                                   :
                                                   makeAnyStringLengthShort(item.Name, 22)
                                                 )
-
                                                 :
                                                 makeAnyStringLengthShort(item.Name, 22)
                                             }
-
-
                                           </Link>
                                         </>
                                       );
@@ -207,8 +187,6 @@ const PopularCategories = () => {
           <>
           </>
       }
-
-
     </>
   );
 };
