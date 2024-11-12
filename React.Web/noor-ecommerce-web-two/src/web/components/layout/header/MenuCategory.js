@@ -15,17 +15,12 @@ const MenuCategory = () => {
     const dispatch = useDispatch();
     const [showState, setShowState] = useState(false);
 
-
     const { t } = useTranslation();
-
     let leftMenuState = useSelector(state => state.commonReducer.isLeftMenuSet);
 
-
     const setLeftMenuManual = (value) => {
-
         dispatch(rootAction.commonAction.setLeftMenu(value));
     }
-
 
     const [PopularCategoriesList, setPopularCategories] = useState([]);
     const [langCode, setLangCode] = useState('');
@@ -36,11 +31,9 @@ const MenuCategory = () => {
         window.location.href = url;
     }
 
-
     useEffect(() => {
         // declare the data fetching function
         const getPopularCategories = async () => {
-
             //--Get language code
             let lnCode = getLanguageCodeFromSession();
             await setLangCode(lnCode);
@@ -50,9 +43,7 @@ const MenuCategory = () => {
                 // customeremail: userData.EmailAddress,
                 Accept: 'application/json',
                 'Content-Type': 'application/json',
-
             }
-
 
             const param = {
                 requestParameters: {
@@ -62,11 +53,9 @@ const MenuCategory = () => {
                 },
             };
 
-
             const response = await MakeApiCallAsync(Config.END_POINT_NAMES['GET_POPULAR_CATEGORIES'], null, param, headers, "POST", true);
             if (response != null && response.data != null) {
                 setPopularCategories(JSON.parse(response.data.data));
-
             }
 
             //-- Get website localization data
@@ -74,16 +63,11 @@ const MenuCategory = () => {
             if (arryRespLocalization != null && arryRespLocalization != undefined && arryRespLocalization.length > 0) {
                 await setLocalizationLabelsArray(arryRespLocalization);
             }
-
-
         }
 
         // call the function
         getPopularCategories().catch(console.error);
     }, [])
-
-
-
     return (
         <>
             <div className="nav-block" onClick={() => setShowState(!showState)}>
@@ -95,7 +79,6 @@ const MenuCategory = () => {
                             </span>
                         </button>
                         <h5 className="mb-0  text-white title-font">
-
                             {LocalizationLabelsArray.length > 0 ?
                                 replaceLoclizationLabel(LocalizationLabelsArray, " shop By Category", "lbl_shopby_category")
                                 :
@@ -123,7 +106,6 @@ const MenuCategory = () => {
                                 </a>
                             </li>
 
-
                             {PopularCategoriesList && PopularCategoriesList?.filter(x => x.ParentCategoryID != null && x.ParentCategoryID != undefined)?.map((item, i) => (
                                 <li key={i}>
                                     <Link to="#"
@@ -132,38 +114,27 @@ const MenuCategory = () => {
                                         }}
                                     >
                                         <Media src={adminPanelBaseURL + item.AttachmentURL} alt="category-product" className="img-fluid" style={{ width: "39px", height: "39px" }} />
-
                                         {
-                                            langCode != null && langCode == Config.LANG_CODES_ENUM["Japanese"]
+                                            langCode != null && langCode == Config.LANG_CODES_ENUM["Arabic"]
                                                 ?
                                                 (item.LocalizationJsonData != null && item.LocalizationJsonData.length > 0
                                                     ?
-                                                    makeAnyStringLengthShort(item.LocalizationJsonData?.find(l => l.langId == Config.LANG_CODES_IDS_ENUM["Japanese"])?.text, 22)
+                                                    makeAnyStringLengthShort(item.LocalizationJsonData?.find(l => l.langId == Config.LANG_CODES_IDS_ENUM["Arabic"])?.text, 22)
                                                     :
                                                     makeAnyStringLengthShort(item.Name, 17)
                                                 )
-
                                                 :
                                                 makeAnyStringLengthShort(item.Name, 17)
                                         }
                                     </Link>
                                 </li>
                             ))}
-
-
-
-
-
-
-
                         </ul>
                     </div>
                 </div>
             </div>
         </>
     );
-
 }
-
 
 export default MenuCategory;

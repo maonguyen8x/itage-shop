@@ -13,7 +13,6 @@ import GlobalEnums from '../../../helpers/GlobalEnums';
 
 
 export const SiteLeftSidebarFilter = (props) => {
-
     const [isCategoryOpen, setIsCategoryOpen] = useState(true);
     const [selectedBrands, setSelectedBrands] = useState([]);
     const [selectedColor, setSelectedColor] = useState([]);
@@ -98,18 +97,12 @@ export const SiteLeftSidebarFilter = (props) => {
         window.location.reload();
     }
 
-
     useEffect(() => {
-
         const GetFiltersAllValues = async () => {
-
-
             const headers = {
                 Accept: 'application/json',
                 'Content-Type': 'application/json',
-
             }
-
 
             const param = {
                 requestParameters: {
@@ -137,26 +130,19 @@ export const SiteLeftSidebarFilter = (props) => {
             const manufacturerResponse = await MakeApiCallAsync(Config.END_POINT_NAMES['GET_MANUFACTURER_LIST'], null, param, headers, "POST", true);
             if (manufacturerResponse != null && manufacturerResponse.data != null) {
                 await setManufacturerList(JSON.parse(manufacturerResponse.data.data));
-
             }
 
             //--Get popular tags
             const tagsResponse = await MakeApiCallAsync(Config.END_POINT_NAMES['GET_TAGS_LIST'], null, param, headers, "POST", true);
             if (tagsResponse != null && tagsResponse.data != null) {
                 await setTagsList(JSON.parse(tagsResponse.data.data));
-
             }
-
-
-
         }
 
         //--start loader
         dispatch(rootAction.commonAction.setLoading(true));
-
         // call the function
         GetFiltersAllValues().catch(console.error);
-
         //--stop loader
         setTimeout(() => {
             dispatch(rootAction.commonAction.setLoading(false));
@@ -166,7 +152,6 @@ export const SiteLeftSidebarFilter = (props) => {
     useEffect(() => {
         // declare the data fetching function
         const dataOperationFunc = async () => {
-
             //--Get language code
             let lnCode = getLanguageCodeFromSession();
             await setLangCode(lnCode);
@@ -181,14 +166,9 @@ export const SiteLeftSidebarFilter = (props) => {
         dataOperationFunc().catch(console.error);
     }, [])
 
-
-
-
     return (
         <>
-
             <div className="collection-filter-block creative-card creative-inner category-side">
-
                 <div className="collection-mobile-back">
                     <span className="filter-back"
                         onClick={(e) => {
@@ -198,7 +178,6 @@ export const SiteLeftSidebarFilter = (props) => {
                         <i className="fa fa-angle-left" aria-hidden="true"></i> back
                     </span>
                 </div>
-
                 {
                     CategoriesList != undefined && CategoriesList != null && CategoriesList.length > 0
                         ?
@@ -215,44 +194,34 @@ export const SiteLeftSidebarFilter = (props) => {
                                 <div className="collection-collapse-block-content">
                                     <div className="collection-brand-filter">
                                         <ul className="category-list">
-
                                             {CategoriesList?.map((item, idx) => {
-
                                                 if (CategoriesList.filter(obj => obj.ParentCategoryID == item.CategoryID).length > 0) {
                                                     return (
                                                         <>
                                                             <li style={{ marginTop: "21px" }}>
                                                                 <div>
-
-
                                                                     <Link to="#!">
                                                                         {
-
-                                                                            langCode != null && langCode == Config.LANG_CODES_ENUM["Japanese"]
+                                                                            langCode != null && langCode == Config.LANG_CODES_ENUM["Arabic"]
                                                                                 ?
                                                                                 (item.LocalizationJsonData != null && item.LocalizationJsonData.length > 0
                                                                                     ?
-                                                                                    makeAnyStringLengthShort(item.LocalizationJsonData?.find(l => l.langId == Config.LANG_CODES_IDS_ENUM["Japanese"])?.text, 30)
+                                                                                    makeAnyStringLengthShort(item.LocalizationJsonData?.find(l => l.langId == Config.LANG_CODES_IDS_ENUM["Arabic"])?.text, 30)
                                                                                     :
                                                                                     makeAnyStringLengthShort(item.Name, 30)
                                                                                 )
-
                                                                                 :
                                                                                 makeAnyStringLengthShort(item.Name, 30)
                                                                         }
                                                                     </Link>
                                                                     <div style={{ marginLeft: "20px", fontSize: "12px", lineHeight: "14px" }}>
                                                                         {CategoriesList.filter(obj => obj.ParentCategoryID == item.CategoryID).map((elementChild, idxChild) => {
-
                                                                             return (
                                                                                 <>
-
-
                                                                                     <div className="custom-control custom-checkbox collection-filter-checkbox" >
                                                                                         <Input
                                                                                             onChange={(e) => {
                                                                                                 props.setFilterValueInParent(e, elementChild.CategoryID, "category");
-
                                                                                             }}
                                                                                             type="checkbox"
                                                                                             className="custom-control-input"
@@ -260,28 +229,22 @@ export const SiteLeftSidebarFilter = (props) => {
                                                                                         />
                                                                                         <label className="custom-control-label">
                                                                                             {
-
-                                                                                                langCode != null && langCode == Config.LANG_CODES_ENUM["Japanese"]
+                                                                                                langCode != null && langCode == Config.LANG_CODES_ENUM["Arabic"]
                                                                                                     ?
                                                                                                     (elementChild.LocalizationJsonData != null && elementChild.LocalizationJsonData.length > 0
                                                                                                         ?
-                                                                                                        makeAnyStringLengthShort(elementChild.LocalizationJsonData?.find(l => l.langId == Config.LANG_CODES_IDS_ENUM["Japanese"])?.text, 30)
+                                                                                                        makeAnyStringLengthShort(elementChild.LocalizationJsonData?.find(l => l.langId == Config.LANG_CODES_IDS_ENUM["Arabic"])?.text, 30)
                                                                                                         :
                                                                                                         makeAnyStringLengthShort(elementChild.Name, 30)
                                                                                                     )
-
                                                                                                     :
                                                                                                     makeAnyStringLengthShort(elementChild.Name, 30)
                                                                                             }
                                                                                         </label>
                                                                                     </div>
-
-
-
                                                                                 </>
                                                                             );
                                                                         })}
-
                                                                     </div>
                                                                 </div>
                                                             </li>
@@ -290,11 +253,7 @@ export const SiteLeftSidebarFilter = (props) => {
                                                 } else {
                                                     return null;
                                                 }
-
-
                                             })}
-
-
                                         </ul>
                                     </div>
                                 </div>
@@ -302,9 +261,7 @@ export const SiteLeftSidebarFilter = (props) => {
                         </div>
                         :
                         <>
-
                         </>
-
                 }
 
                 {
@@ -321,17 +278,12 @@ export const SiteLeftSidebarFilter = (props) => {
                             <Collapse isOpen={isBrandOpen}>
                                 <div className="collection-collapse-block-content">
                                     <div className="collection-brand-filter">
-
-
                                         {ManufacturerList &&
                                             ManufacturerList?.slice(0, 10)?.map((item, idx) =>
-
-
                                                 <div className="custom-control custom-checkbox collection-filter-checkbox" >
                                                     <Input
                                                         onChange={(e) => {
                                                             props.setFilterValueInParent(e, item.ManufacturerID, "brand");
-
                                                         }}
                                                         type="checkbox"
                                                         className="custom-control-input"
@@ -339,23 +291,15 @@ export const SiteLeftSidebarFilter = (props) => {
                                                     />
                                                     <label className="custom-control-label">{item.Name}</label>
                                                 </div>
-
-
                                             )}
-
-
-
                                     </div>
                                 </div>
                             </Collapse>
                         </div>
-
                         :
-
                         <>
                         </>
                 }
-
                 {
                     SizeList != undefined && SizeList != null && SizeList.length > 0
                         ?
@@ -370,17 +314,12 @@ export const SiteLeftSidebarFilter = (props) => {
                             <Collapse isOpen={isSizeOpen}>
                                 <div className="collection-collapse-block-content">
                                     <div className="collection-brand-filter">
-
-
                                         {SizeList &&
                                             SizeList?.slice(0, 10)?.map((item, idx) =>
-
-
                                                 <div className="custom-control custom-checkbox collection-filter-checkbox" >
                                                     <Input
                                                         onChange={(e) => {
                                                             props.setFilterValueInParent(e, item.SizeID, "size");
-
                                                         }}
                                                         type="checkbox"
                                                         className="custom-control-input"
@@ -388,12 +327,11 @@ export const SiteLeftSidebarFilter = (props) => {
                                                     />
                                                     <label className="custom-control-label">
                                                         {
-
-                                                            langCode != null && langCode == Config.LANG_CODES_ENUM["Japanese"]
+                                                            langCode != null && langCode == Config.LANG_CODES_ENUM["Arabic"]
                                                                 ?
                                                                 (item.LocalizationJsonData != null && item.LocalizationJsonData.length > 0
                                                                     ?
-                                                                    makeAnyStringLengthShort(item.LocalizationJsonData?.find(l => l.langId == Config.LANG_CODES_IDS_ENUM["Japanese"])?.text, 30)
+                                                                    makeAnyStringLengthShort(item.LocalizationJsonData?.find(l => l.langId == Config.LANG_CODES_IDS_ENUM["Arabic"])?.text, 30)
                                                                     :
                                                                     makeAnyStringLengthShort(item.ShortName, 30)
                                                                 )
@@ -403,27 +341,18 @@ export const SiteLeftSidebarFilter = (props) => {
                                                         }
                                                     </label>
                                                 </div>
-
-
                                             )}
-
-
-
                                     </div>
                                 </div>
                             </Collapse>
                         </div>
-
                         :
-
                         <>
                         </>
                 }
-
                 {
                     PriceValuesArray != undefined && PriceValuesArray != null && PriceValuesArray.length > 0
                         ?
-
                         <div className="collection-collapse-block border-0 open">
                             <h3 className="collapse-block-title" onClick={togglePrice}>
                                 {LocalizationLabelsArray.length > 0 ?
@@ -435,15 +364,12 @@ export const SiteLeftSidebarFilter = (props) => {
                             <Collapse isOpen={isPriceOpen}>
                                 <div className="collection-collapse-block-content">
                                     <div className="collection-brand-filter">
-
                                         {
                                             PriceValuesArray?.map((item, idx) =>
-
                                                 <div className="custom-control custom-checkbox collection-filter-checkbox">
                                                     <Input
                                                         onClick={(e) => {
                                                             props.setFilterValueInParent(e, item.id, "price");
-
                                                         }}
                                                         type="radio"
                                                         name="price-filter"
@@ -455,8 +381,6 @@ export const SiteLeftSidebarFilter = (props) => {
                                                     <Label className="custom-control-label">{item.name}</Label>
                                                 </div>
                                             )}
-
-
                                     </div>
                                 </div>
                             </Collapse>
@@ -504,13 +428,10 @@ export const SiteLeftSidebarFilter = (props) => {
                                         <ProductRatingStars Rating={2} />
                                     </Link>
                                 </div>
-
                             </div>
                         </div>
                     </Collapse>
                 </div>
-
-
                 {
                     TagsList != undefined && TagsList != null && TagsList.length > 0
                         ?
@@ -525,17 +446,12 @@ export const SiteLeftSidebarFilter = (props) => {
                             <Collapse isOpen={isTagOpen}>
                                 <div className="collection-collapse-block-content">
                                     <div className="collection-brand-filter">
-
-
                                         {TagsList &&
                                             TagsList?.slice(0, 10)?.map((item, idx) =>
-
-
                                                 <div className="custom-control custom-checkbox collection-filter-checkbox" >
                                                     <Input
                                                         onChange={(e) => {
                                                             props.setFilterValueInParent(e, item.TagID, "tag");
-
                                                         }}
                                                         type="checkbox"
                                                         className="custom-control-input"
@@ -543,12 +459,11 @@ export const SiteLeftSidebarFilter = (props) => {
                                                     />
                                                     <label className="custom-control-label">
                                                         {
-
-                                                            langCode != null && langCode == Config.LANG_CODES_ENUM["Japanese"]
+                                                            langCode != null && langCode == Config.LANG_CODES_ENUM["Arabic"]
                                                                 ?
                                                                 (item.LocalizationJsonData != null && item.LocalizationJsonData.length > 0
                                                                     ?
-                                                                    makeAnyStringLengthShort(item.LocalizationJsonData?.find(l => l.langId == Config.LANG_CODES_IDS_ENUM["Japanese"])?.text, 30)
+                                                                    makeAnyStringLengthShort(item.LocalizationJsonData?.find(l => l.langId == Config.LANG_CODES_IDS_ENUM["Arabic"])?.text, 30)
                                                                     :
                                                                     makeAnyStringLengthShort(item.TagName, 30)
                                                                 )
@@ -558,34 +473,21 @@ export const SiteLeftSidebarFilter = (props) => {
                                                         }
                                                     </label>
                                                 </div>
-
-
                                             )}
-
-
-
                                     </div>
                                 </div>
                             </Collapse>
                         </div>
-
                         :
-
                         <>
                         </>
                 }
-
-
-
-
-
                 <Row>
                     <Col xs="12" md="12" lg="12" className="text-center">
                         <Link
                             class="btn btn-normal btn-block"
                             onClick={(e) => {
                                 clearFilter(e);
-
                             }}
                         >
                             
@@ -597,38 +499,25 @@ export const SiteLeftSidebarFilter = (props) => {
                         </Link>
                     </Col>
                 </Row>
-
-
-
             </div>
-
             <LeftSideBarPopularProducts />
-
-
         </>
-
-
     );
 };
 
-
 export const LeftSideBarPopularProducts = () => {
     const dispatch = useDispatch();
-
     const [PopularProductsList, setPopularProductsList] = useState([]);
     const [adminPanelBaseURL, setBaseUrl] = useState(Config['ADMIN_BASE_URL']);
     const [LocalizationLabelsArray, setLocalizationLabelsArray] = useState([]);
 
     const GetPopularProductsForLeftSideBar = async () => {
-
         const headersPouplarProducts = {
             // customerid: userData?.UserID,
             // customeremail: userData.EmailAddress,
             Accept: 'application/json',
             'Content-Type': 'application/json',
-
         }
-
 
         const paramPouplarProducts = {
             requestParameters: {
@@ -645,35 +534,27 @@ export const LeftSideBarPopularProducts = () => {
         }
     }
 
-
     useEffect(() => {
 
         const GetFiltersAllValues = async () => {
-
             //--get popular products list
             await GetPopularProductsForLeftSideBar();
-
             //-- Get website localization data
             let arryRespLocalization = await GetLocalizationControlsJsonDataForScreen(GlobalEnums.Entities["SiteLeftSidebarFilter"], null);
             if (arryRespLocalization != null && arryRespLocalization != undefined && arryRespLocalization.length > 0) {
                 await setLocalizationLabelsArray(arryRespLocalization);
             }
-
         }
 
         //--start loader
         dispatch(rootAction.commonAction.setLoading(true));
-
         // call the function
         GetFiltersAllValues().catch(console.error);
-
         //--stop loader
         setTimeout(() => {
             dispatch(rootAction.commonAction.setLoading(false));
         }, LOADER_DURATION);
     }, [])
-
-
 
     return (
 
@@ -684,7 +565,6 @@ export const LeftSideBarPopularProducts = () => {
                     :
                     "Popular Products"
                 }
-
             </h5>
             <div className="offer-slider slide-1">
                 <div>
@@ -697,7 +577,6 @@ export const LeftSideBarPopularProducts = () => {
                                         >
                                             <Media className="img-fluid " src={adminPanelBaseURL + img.AttachmentURL} alt="" />
                                         </Link>
-
                                     )
                                 }
 
@@ -715,8 +594,5 @@ export const LeftSideBarPopularProducts = () => {
                 </div>
             </div>
         </div>
-
     );
 }
-
-

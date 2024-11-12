@@ -4,7 +4,7 @@ const Config = {
     WEBSITE_BASE_URL: 'https://localhost:3000/',
     DYNAMIC_METHOD_SUB_URL: 'api/v1/dynamic/dataoperation/',
     COMMON_CONTROLLER_SUB_URL: 'api/v1/common/',
-    SITE_TTILE: 'ITage Shop',
+    SITE_TTILE: 'Noor Shop',
 
     END_POINT_NAMES: {
         GET_SIZE_LIST: 'get-size-list',
@@ -76,12 +76,12 @@ const Config = {
 
     LANG_CODES_ENUM : {
         English: "en",
-        Japanese: "ja"
+        Arabic: "ar"
     },
     
     LANG_CODES_IDS_ENUM : {
         English: 1,
-        Japanese: 2
+        Arabic: 2
     }
     
 }
