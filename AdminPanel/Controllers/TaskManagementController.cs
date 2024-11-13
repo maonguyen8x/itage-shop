@@ -28,7 +28,6 @@ namespace AdminPanel.Controllers
 {
     public class TaskManagementController : BaseController
     {
-
         private readonly IBasicDataServicesDAL _basicDataDAL;
         private readonly IConfigurationServicesDAL _configurationServicesDAL;
         private readonly IConstants _constants;
@@ -39,7 +38,6 @@ namespace AdminPanel.Controllers
         private readonly ITasksManagementServices _tasksManagementServices;
         private readonly ISalesServicesDAL _salesServicesDAL;
         private readonly ITaskManagementExternsions _taskManagementExternsions;
-
 
         public TaskManagementController(IBasicDataServicesDAL basicDataDAL, IConfigurationServicesDAL configurationServicesDAL, IConstants constants, ICommonServicesDAL commonServicesDAL,
             ISessionManager sessionManag, IUserManagementServicesDAL userManagementServicesDAL, IFilesHelpers filesHelpers, ITasksManagementServices tasksManagementServices,
@@ -64,7 +62,6 @@ namespace AdminPanel.Controllers
         {
             // ✅ Main Model
             TasksManagementModel model = new TasksManagementModel();
-
             #region page basic info
             model.PageBasicInfoObj = new PageBasicInfo();
             model.PageBasicInfoObj.PageTitle = "Requests Queue";
@@ -74,8 +71,6 @@ namespace AdminPanel.Controllers
 
             try
             {
-
-
                 // Get request types list
                 RequestTypeEntity requestTypeEntity = new RequestTypeEntity()
                 {
@@ -84,7 +79,6 @@ namespace AdminPanel.Controllers
                 };
                 model.requestTypesList = await this._tasksManagementServices.GetRequestTypeListDAL(requestTypeEntity);
 
-
                 // Get request status list
                 RequestStatusEntity requestStatusEntity = new RequestStatusEntity()
                 {
@@ -92,12 +86,8 @@ namespace AdminPanel.Controllers
                     PageSize = 5000
                 };
                 model.requestStatusesList = await this._tasksManagementServices.GetRequestStatusListDAL(requestStatusEntity);
-
-
-
                 FormData.PageSize = this._constants.ITEMS_PER_PAGE();
                 model.requestsQueueList = await _tasksManagementServices.GetRequestQueueListDAL(FormData);
-
 
                 #region pagination data
                 model.pageHelperObj = new PagerHelper();
@@ -105,19 +95,15 @@ namespace AdminPanel.Controllers
                 model.pageHelperObj = PagerHelper.Instance.MakePaginationObject(model?.requestsQueueList?.Count() ?? 0, TotalRecords, _constants.ITEMS_PER_PAGE(), FormData.PageNo);
                 #endregion
 
-
-
                 if (FormData.DataExportType != null && FormData.DataExportType == (short)DataExportTypeEnum.Excel && model?.requestsQueueList?.Count > 0)
                 {
                     var ExcelFileResutl = await this._filesHelpers.ExportToExcel(this, model.PageBasicInfoObj.PageTitle, model.requestsQueueList.Cast<dynamic?>().ToList());
                     return ExcelFileResutl;
                 }
-
             }
             catch (Exception ex)
             {
                 await this._commonServicesDAL.LogRunTimeExceptionDAL(ex.Message, ex.StackTrace, ex.StackTrace);
-
                 #region error model
                 model.SuccessErrorMsgEntityObj = new SuccessErrorMsgEntity();
                 model.SuccessErrorMsgEntityObj.ErrorMsg = "An error occured. Please try again.";
@@ -133,7 +119,6 @@ namespace AdminPanel.Controllers
             return View(model);
         }
 
-
         [HttpGet]
         [RolesRightsAuthorizationHelper((int)EntitiesEnum.RequestsQueue, 0, 0, 0, (short)UserRightsEnum.View_All, (short)UserRightsEnum.View_Self)]
         public async Task<IActionResult> GetVendorRequestDataForRequestQueue(int TaskId)
@@ -141,10 +126,8 @@ namespace AdminPanel.Controllers
             // ✅ Main Model
             TasksManagementModel model = new TasksManagementModel();
 
-
             try
             {
-
                 #region page basic info
                 model.PageBasicInfoObj = new PageBasicInfo();
                 model.PageBasicInfoObj.PageTitle = "Vendor Request";
@@ -165,8 +148,6 @@ namespace AdminPanel.Controllers
                     model.requestsQueueEntity.RequestTypeId = RequestQueueObj.RequestTypeId;
                 }
 
-
-
                 // Get request status list
                 RequestStatusEntity requestStatusEntity = new RequestStatusEntity()
                 {
@@ -185,7 +166,6 @@ namespace AdminPanel.Controllers
                     PageNo = 1,
                     PageSize = 1,
                     CountryId = model?.vendorsAccountRequestObj?.AddressOneCountryId ?? 0,
-
                 };
                 model.CountriesList = await this._userManagementServicesDAL.GetCountriesListDAL(countryEntity);
 
@@ -220,17 +200,14 @@ namespace AdminPanel.Controllers
             catch (Exception ex)
             {
                 await this._commonServicesDAL.LogRunTimeExceptionDAL(ex.Message, ex.StackTrace, ex.StackTrace);
-
                 #region error model
                 model.SuccessErrorMsgEntityObj = new SuccessErrorMsgEntity();
                 model.SuccessErrorMsgEntityObj.ErrorMsg = "An error occured. Please try again.";
                 #endregion
-
             }
 
             return PartialView("~/Views/TaskManagement/PartialViews/_VendorRequest.cshtml", model);
         }
-
 
         [HttpPost]
         [RolesRightsAuthorizationHelper((int)EntitiesEnum.RequestsQueue, (short)UserRightsEnum.Add, (short)UserRightsEnum.Update, 0, 0, 0)]
@@ -238,7 +215,6 @@ namespace AdminPanel.Controllers
         {
             // ✅ Main Model
             TasksManagementModel model = new TasksManagementModel();
-
 
             try
             {
@@ -286,7 +262,6 @@ namespace AdminPanel.Controllers
 
                         break;
 
-
                     case (int)RequestTypesEnum.OrderRefundRequest:
                         if (FormData.RequestStatusId == (int)RequestStatusEnum.Approved)
                         {
@@ -318,20 +293,15 @@ namespace AdminPanel.Controllers
             }
             catch (Exception ex)
             {
-
                 await this._commonServicesDAL.LogRunTimeExceptionDAL(ex.Message, ex.StackTrace, ex.StackTrace);
-
                 return Json(new { success = false, message = "An error occured on server side.", ExMsg = ex.Message });
             }
         }
-
-
 
         [HttpPost]
         [RolesRightsAuthorizationHelper((int)EntitiesEnum.OrderDetail, (short)UserRightsEnum.Add, 0, 0, 0, 0)]
         public async Task<IActionResult> RaiseOrderRefundRequest(OrderRefundParam FormData)
         {
-
             try
             {
                 // ✅ Main Model
@@ -358,7 +328,6 @@ namespace AdminPanel.Controllers
 
                 #endregion
 
-
                 #region check if request already exist
                 RequestsQueueEntity RequestsQueueEntityParam = new RequestsQueueEntity
                 {
@@ -377,9 +346,7 @@ namespace AdminPanel.Controllers
                 //-- Get order detail by id
                 OrderEntity OrderFormData = new OrderEntity()
                 {
-
                     OrderId = FormData.OrderId,
-
                 };
                 var OrderObj = await _salesServicesDAL.GetOrderDetailByIdDAL(OrderFormData);
 
@@ -394,7 +361,6 @@ namespace AdminPanel.Controllers
                     //--if partially refund then take the amount that we sent from front end
                     RefundAmount =Convert.ToDecimal(FormData.IsFullRefund == false ? FormData.RefundAmount : OrderObj.OrderTotal);
                 }
-
 
                 #region persist request queue
                 string result = string.Empty;
@@ -452,7 +418,6 @@ namespace AdminPanel.Controllers
 
                 #endregion
 
-
                 if (validationList.Count() > 0 && validationList.Where(a => a != "Form is valid" && a != "Saved Successfully!").ToList().Count > 0)
                 {
                     return Json(new { success = false, message = "An error occured. Please try again!" });
@@ -461,21 +426,13 @@ namespace AdminPanel.Controllers
                 {
                     return Json(new { success = true, message = "Saved Successfully!" });
                 }
-
-
-
             }
             catch (Exception ex)
             {
-
                 await this._commonServicesDAL.LogRunTimeExceptionDAL(ex.Message, ex.StackTrace, ex.StackTrace);
-
                 return Json(new { success = false, message = "An error occured on server side.", ExMsg = ex.Message });
             }
-
-
         }
-
 
         [HttpGet]
         [RolesRightsAuthorizationHelper((int)EntitiesEnum.RequestsQueue, 0, 0, 0, (short)UserRightsEnum.View_All, (short)UserRightsEnum.View_Self)]
@@ -484,10 +441,8 @@ namespace AdminPanel.Controllers
             // ✅ Main Model
             TasksManagementModel model = new TasksManagementModel();
 
-
             try
             {
-
                 #region page basic info
                 model.PageBasicInfoObj = new PageBasicInfo();
                 model.PageBasicInfoObj.PageTitle = "Order Refund Request";
@@ -508,8 +463,6 @@ namespace AdminPanel.Controllers
                     model.requestsQueueEntity.RequestTypeId = RequestQueueObj.RequestTypeId;
                 }
 
-
-
                 // Get request status list
                 RequestStatusEntity requestStatusEntity = new RequestStatusEntity()
                 {
@@ -527,9 +480,7 @@ namespace AdminPanel.Controllers
                 {
                     OrderEntity OrderFormData = new OrderEntity()
                     {
-
                         OrderId = model.OrderRefundRequestObj.OrderId,
-
                     };
                     model.OrderObj = await _salesServicesDAL.GetOrderDetailByIdDAL(OrderFormData);
 
@@ -537,28 +488,16 @@ namespace AdminPanel.Controllers
                     var PaymentMethodsList = JsonConvert.DeserializeObject<List<OrdersPaymentEntity>>(model?.OrderObj?.OrderPaymentDetailsJson ?? "[]");
                     model.OrderRefundRequestObj.PaymentMethodName = PaymentMethodsList?.FirstOrDefault()?.PaymentMethodName;
                 }
-
-
             }
             catch (Exception ex)
             {
                 await this._commonServicesDAL.LogRunTimeExceptionDAL(ex.Message, ex.StackTrace, ex.StackTrace);
-
                 #region error model
                 model.SuccessErrorMsgEntityObj = new SuccessErrorMsgEntity();
                 model.SuccessErrorMsgEntityObj.ErrorMsg = "An error occured. Please try again.";
                 #endregion
-
             }
-
             return PartialView("~/Views/TaskManagement/PartialViews/_OrderRefundRequest.cshtml", model);
         }
-
-
-
-
-      
-
     }
-
 }

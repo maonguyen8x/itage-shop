@@ -12,12 +12,10 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Stripe;
 
-
 namespace AdminPanel.Controllers
 {
     public class AccountsController : BaseController
     {
-
         private readonly IConstants _constants;
         private readonly ICommonServicesDAL _commonServicesDAL;
         private readonly ISessionManager _sessionManag;
@@ -39,7 +37,6 @@ namespace AdminPanel.Controllers
             this._userManagementServicesDAL = userManagementServicesDAL;
         }
 
-
         [HttpGet]
         [RolesRightsAuthorizationHelper((int)EntitiesEnum.Banks, 0, 0, 0, (short)UserRightsEnum.View_All, (short)UserRightsEnum.View_Self)]
         public async Task<IActionResult> Banks(BankMasterEntity FormData)
@@ -56,7 +53,6 @@ namespace AdminPanel.Controllers
 
             try
             {
-
                 //--Get bank industry type list
                 BankIndustryTypeEntity bankIndustryTypeEntity = new BankIndustryTypeEntity()
                 {
@@ -102,12 +98,10 @@ namespace AdminPanel.Controllers
             catch (Exception ex)
             {
                 await this._commonServicesDAL.LogRunTimeExceptionDAL(ex.Message, ex.StackTrace, ex.StackTrace);
-
                 #region error model
                 model.SuccessErrorMsgEntityObj = new SuccessErrorMsgEntity();
                 model.SuccessErrorMsgEntityObj.ErrorMsg = "An error occured. Please try again.";
                 #endregion
-
             }
 
             if (HttpContext.Request.Headers["X-Requested-With"] == "XMLHttpRequest")//if request is ajax
@@ -135,7 +129,6 @@ namespace AdminPanel.Controllers
                     {
                         return Json(new { success = false, message = "Bank id is null!" });
                     }
-
                 }
 
                 FormData.LoginUserId = await this._sessionManag.GetLoginUserIdFromSession();
@@ -152,13 +145,11 @@ namespace AdminPanel.Controllers
             }
             catch (Exception ex)
             {
-
                 await this._commonServicesDAL.LogRunTimeExceptionDAL(ex.Message, ex.StackTrace, ex.StackTrace);
 
                 return Json(new { success = false, message = "An error occured on server side.", ExMsg = ex.Message });
             }
         }
-
 
         [HttpGet]
         [RolesRightsAuthorizationHelper((int)EntitiesEnum.UsersBankAccounts, 0, 0, 0, (short)UserRightsEnum.View_All, (short)UserRightsEnum.View_Self)]
@@ -166,7 +157,6 @@ namespace AdminPanel.Controllers
         {
             // ✅ Main Model
             AccountsModel model = new AccountsModel();
-
             #region page basic info
             model.PageBasicInfoObj = new PageBasicInfo();
             model.PageBasicInfoObj.PageTitle = "Users Bank Accounts";
@@ -176,59 +166,44 @@ namespace AdminPanel.Controllers
 
             try
             {
-
-
                 FormData.PageSize = this._constants.ITEMS_PER_PAGE();
-
                 model.BankAccountList = await _accountsServicesDAL.GetUserBankAccountsDAL(FormData);
-
-
                 #region pagination data
                 model.pageHelperObj = new PagerHelper();
                 int TotalRecords = model?.BankAccountList?.FirstOrDefault()?.TotalRecords ?? 0;
                 model.pageHelperObj = PagerHelper.Instance.MakePaginationObject(model?.BankAccountList?.Count() ?? 0, TotalRecords, _constants.ITEMS_PER_PAGE(), FormData.PageNo);
                 #endregion
 
-
                 if (FormData.DataExportType != null && FormData.DataExportType == (short)DataExportTypeEnum.Excel && model?.BankAccountList?.Count > 0)
                 {
                     var ExcelFileResutl = await this._filesHelpers.ExportToExcel(this, model.PageBasicInfoObj.PageTitle, model.BankAccountList.Cast<dynamic?>().ToList());
                     return ExcelFileResutl;
                 }
-
             }
             catch (Exception ex)
             {
                 await this._commonServicesDAL.LogRunTimeExceptionDAL(ex.Message, ex.StackTrace, ex.StackTrace);
-
                 #region error model
                 model.SuccessErrorMsgEntityObj = new SuccessErrorMsgEntity();
                 model.SuccessErrorMsgEntityObj.ErrorMsg = "An error occured. Please try again.";
                 #endregion
-
             }
-
             if (HttpContext.Request.Headers["X-Requested-With"] == "XMLHttpRequest")//if request is ajax
             {
                 return PartialView("~/Views/Accounts/PartialViews/_UsersBankAccounts.cshtml", model);
             }
-
             return View(model);
         }
-
 
         [HttpGet]
         [RolesRightsAuthorizationHelper((int)EntitiesEnum.CreateNewUserBankAccount, 0, 0, 0, (short)UserRightsEnum.View_All, (short)UserRightsEnum.View_Self)]
         public async Task<IActionResult> CreateUserBankAccount()
         {
-
             #region Basic page setting area
             ViewBag.ThemeFormValidationScriptEnabled = true;
             #endregion
-
             // ✅ Main Model
             AccountsModel model = new AccountsModel();
-
             #region page basic info
             model.PageBasicInfoObj = new PageBasicInfo();
             model.PageBasicInfoObj.PageTitle = "Create User Bank Account";
@@ -236,10 +211,8 @@ namespace AdminPanel.Controllers
             model.PageBasicInfoObj.langCode = await _sessionManag.GetLanguageCodeFromSession();
             #endregion
 
-
             try
             {
-
                 //--Get bank list
                 BankMasterEntity bankMasterEntity = new BankMasterEntity()
                 {
@@ -251,29 +224,21 @@ namespace AdminPanel.Controllers
                 //--Get bank account types
                 BankAccountType bankAccountType = new BankAccountType();
                 model.BankAccountTypesList = await this._accountsServicesDAL.GetBankAccountTypesDAL(bankAccountType);
-
-
             }
             catch (Exception ex)
             {
                 await this._commonServicesDAL.LogRunTimeExceptionDAL(ex.Message, ex.StackTrace, ex.StackTrace);
-
                 #region error model
                 model.SuccessErrorMsgEntityObj = new SuccessErrorMsgEntity();
                 model.SuccessErrorMsgEntityObj.ErrorMsg = "An error occured. Please try again.";
                 #endregion
-
             }
 
-
             return View(model);
-
         }
-
 
         [HttpGet]
         public async Task<IActionResult> GetUsersListByUserName(string UserName)
-
         {
             // ✅ Main Model
             AccountsModel model = new AccountsModel();
@@ -284,7 +249,6 @@ namespace AdminPanel.Controllers
             model.PageBasicInfoObj.langCode = await _sessionManag.GetLanguageCodeFromSession();
             #endregion
 
-
             UserEntity userEntityObj = new UserEntity()
             {
                 UserName = UserName,
@@ -294,25 +258,20 @@ namespace AdminPanel.Controllers
             };
             model.UsersList = await _userManagementServicesDAL.GetUsersListByUserNameDAL(userEntityObj);
 
-
             if (model.UsersList != null && model.UsersList.Count() > 0)
             {
                 return Json(model.UsersList);
-
             }
             else
             {
                 return Json(new { message = "No data found" });
             }
-
-
         }
 
         [HttpPost]
         [RolesRightsAuthorizationHelper((int)EntitiesEnum.CreateNewUserBankAccount, (short)UserRightsEnum.Add, 0, 0, 0, 0)]
         public async Task<IActionResult> CreateUserBankAccount(BankAccountEntity FormData)
         {
-
             try
             {
                 // ✅ Main Model
@@ -350,16 +309,12 @@ namespace AdminPanel.Controllers
                 {
                     FormData.CityId = null;
                 }
-
-
-
                 #region image file conversion secion
                 List<ImageFileInfo> ImageFileInfosList = new List<ImageFileInfo>();
                 if (FormData != null && FormData.BankAttachementFiles != null && FormData.BankAttachementFiles.Length > 0)
                 {
                     foreach (IFormFile photo in FormData.BankAttachementFiles)
                     {
-
                         string url = await _filesHelpers.SaveFileToDirectory(photo, null);
                         if (!String.IsNullOrWhiteSpace(url))
                         {
@@ -372,9 +327,7 @@ namespace AdminPanel.Controllers
                             int AttachmentId = await this._commonServicesDAL.SaveUpdateAttachmentDAL(atch);
 
                             ImageFileInfosList.Add(new ImageFileInfo { AttachmentId = AttachmentId, ImageName = photo.FileName, ImageGuidName = "", ImageURL = url });
-
                         }
-
                     }
 
                     if (ImageFileInfosList != null && ImageFileInfosList.Count > 0)
@@ -387,7 +340,6 @@ namespace AdminPanel.Controllers
                     }
                 }
                 #endregion
-
 
                 var LoginUserId = await this._sessionManag.GetLoginUserIdFromSession();
                 FormData.LoginUserId = LoginUserId ?? 0;
@@ -402,36 +354,25 @@ namespace AdminPanel.Controllers
                 {
                     return Json(new { success = false, message = result });
                 }
-
-
             }
             catch (Exception ex)
             {
-
                 await this._commonServicesDAL.LogRunTimeExceptionDAL(ex.Message, ex.StackTrace, ex.StackTrace);
 
                 return Json(new { success = false, message = "An error occured on server side.", ExMsg = ex.Message });
             }
-
-
-
-
-
         }
-
 
         [HttpGet]
         [RolesRightsAuthorizationHelper((int)EntitiesEnum.UpdateUserBankAccount, 0, 0, 0, (short)UserRightsEnum.View_All, (short)UserRightsEnum.View_Self)]
         public async Task<IActionResult> UpdateUserBankAccount(int BankAccountId)
         {
-
             #region Basic page setting area
             ViewBag.ThemeFormValidationScriptEnabled = true;
             #endregion
 
             // ✅ Main Model
             AccountsModel model = new AccountsModel();
-
             #region page basic info
             model.PageBasicInfoObj = new PageBasicInfo();
             model.PageBasicInfoObj.PageTitle = "Update User Bank Account";
@@ -439,11 +380,8 @@ namespace AdminPanel.Controllers
             model.PageBasicInfoObj.langCode = await _sessionManag.GetLanguageCodeFromSession();
             #endregion
 
-
             try
             {
-
-
                 //--Get bank list
                 BankMasterEntity bankMasterEntity = new BankMasterEntity()
                 {
@@ -467,35 +405,22 @@ namespace AdminPanel.Controllers
                 //--Get bank account types
                 BankAccountType bankAccountType = new BankAccountType();
                 model.BankAccountTypesList = await this._accountsServicesDAL.GetBankAccountTypesDAL(bankAccountType);
-
-
             }
             catch (Exception ex)
             {
                 await this._commonServicesDAL.LogRunTimeExceptionDAL(ex.Message, ex.StackTrace, ex.StackTrace);
-
                 #region error model
                 model.SuccessErrorMsgEntityObj = new SuccessErrorMsgEntity();
                 model.SuccessErrorMsgEntityObj.ErrorMsg = "An error occured. Please try again.";
                 #endregion
-
             }
-
-
-
             return View(model);
-
-
-
-
-
         }
 
         [HttpPost]
         [RolesRightsAuthorizationHelper((int)EntitiesEnum.UpdateUserBankAccount, 0, (short)UserRightsEnum.Update, 0, 0, 0)]
         public async Task<IActionResult> UpdateUserBankAccount(BankAccountEntity FormData)
         {
-
             try
             {
                 // ✅ Main Model
@@ -535,16 +460,12 @@ namespace AdminPanel.Controllers
                 {
                     FormData.CityId = null;
                 }
-
-
-
                 #region image file conversion secion
                 List<ImageFileInfo> ImageFileInfosList = new List<ImageFileInfo>();
                 if (FormData != null && FormData.BankAttachementFiles != null && FormData.BankAttachementFiles.Length > 0)
                 {
                     foreach (IFormFile photo in FormData.BankAttachementFiles)
                     {
-
                         string url = await _filesHelpers.SaveFileToDirectory(photo, null);
                         if (!String.IsNullOrWhiteSpace(url))
                         {
@@ -555,11 +476,8 @@ namespace AdminPanel.Controllers
 
                             //--save attachment url in database
                             int AttachmentId = await this._commonServicesDAL.SaveUpdateAttachmentDAL(atch);
-
                             ImageFileInfosList.Add(new ImageFileInfo { AttachmentId = AttachmentId, ImageName = photo.FileName, ImageGuidName = "", ImageURL = url });
-
                         }
-
                     }
 
                     if (ImageFileInfosList != null && ImageFileInfosList.Count > 0)
@@ -572,7 +490,6 @@ namespace AdminPanel.Controllers
                     }
                 }
                 #endregion
-
 
                 var LoginUserId = await this._sessionManag.GetLoginUserIdFromSession();
                 FormData.LoginUserId = LoginUserId ?? 0;
@@ -587,33 +504,21 @@ namespace AdminPanel.Controllers
                 {
                     return Json(new { success = false, message = result });
                 }
-
-
             }
             catch (Exception ex)
             {
-
                 await this._commonServicesDAL.LogRunTimeExceptionDAL(ex.Message, ex.StackTrace, ex.StackTrace);
-
                 return Json(new { success = false, message = "An error occured on server side.", ExMsg = ex.Message });
             }
-
-
-
-
-
         }
-
 
         // ✅ Delete product images
         [HttpPost]
         [RolesRightsAuthorizationHelper((int)EntitiesEnum.UsersBankAccounts, 0, 0, (short)UserRightsEnum.Delete, 0, 0)]
         public async Task<IActionResult> DeleteUserBankAccountAttachment(string primarykeyValue, string primaryKeyColumn, string tableName, string AttachmentURL, int SqlDeleteType = (short)SqlDeleteTypes.PlainTableDelete)
         {
-
             try
             {
-
                 bool result = await _commonServicesDAL.DeleteAnyRecordDAL(primarykeyValue, primaryKeyColumn, tableName, SqlDeleteType);
                 if (result)
                 {
@@ -622,8 +527,6 @@ namespace AdminPanel.Controllers
                     {
                         System.IO.File.Delete(path);
                     }
-
-
                     return Json(new { success = true, message = "Deleted Successfully!" });
                 }
                 else
@@ -633,13 +536,10 @@ namespace AdminPanel.Controllers
             }
             catch (Exception ex)
             {
-
                 await this._commonServicesDAL.LogRunTimeExceptionDAL(ex.Message, ex.StackTrace, ex.StackTrace);
 
                 return Json(new { success = false, message = "An error occured on server side.", ExMsg = ex.Message });
             }
-
-
         }
 
         [HttpGet]
@@ -648,7 +548,6 @@ namespace AdminPanel.Controllers
         {
             // ✅ Main Model
             AccountsModel model = new AccountsModel();
-
             #region page basic info
             model.PageBasicInfoObj = new PageBasicInfo();
             model.PageBasicInfoObj.PageTitle = "Vendors Commission Setup";
@@ -658,13 +557,8 @@ namespace AdminPanel.Controllers
 
             try
             {
-
-
-
                 FormData.PageSize = this._constants.ITEMS_PER_PAGE();
-
                 model.VendorsCommissionSetupList = await _accountsServicesDAL.GetVendorsCommissionSetupDAL(FormData);
-
 
                 #region pagination data
                 model.pageHelperObj = new PagerHelper();
@@ -672,13 +566,11 @@ namespace AdminPanel.Controllers
                 model.pageHelperObj = PagerHelper.Instance.MakePaginationObject(model?.VendorsCommissionSetupList?.Count() ?? 0, TotalRecords, _constants.ITEMS_PER_PAGE(), FormData.PageNo);
                 #endregion
 
-
                 if (FormData.DataExportType != null && FormData.DataExportType == (short)DataExportTypeEnum.Excel && model?.VendorsCommissionSetupList?.Count > 0)
                 {
                     var ExcelFileResutl = await this._filesHelpers.ExportToExcel(this, model.PageBasicInfoObj.PageTitle, model.VendorsCommissionSetupList.Cast<dynamic?>().ToList());
                     return ExcelFileResutl;
                 }
-
             }
             catch (Exception ex)
             {
@@ -688,7 +580,6 @@ namespace AdminPanel.Controllers
                 model.SuccessErrorMsgEntityObj = new SuccessErrorMsgEntity();
                 model.SuccessErrorMsgEntityObj.ErrorMsg = "An error occured. Please try again.";
                 #endregion
-
             }
 
             if (HttpContext.Request.Headers["X-Requested-With"] == "XMLHttpRequest")//if request is ajax
@@ -703,7 +594,6 @@ namespace AdminPanel.Controllers
         [RolesRightsAuthorizationHelper((int)EntitiesEnum.VendorsCommissionSetup, 0, (short)UserRightsEnum.Update, 0, 0, 0)]
         public async Task<IActionResult> UpdateVendorCommission(VendorsCommissionSetupEntity FormData, int DataOperationType = (short)DataOperationType.Update)
         {
-
             try
             {
                 if (FormData.CommissionValue < 0 || FormData.CommissionValue > 99)
@@ -715,9 +605,6 @@ namespace AdminPanel.Controllers
                 {
                     return Json(new { success = false, message = "User id is null!" });
                 }
-
-
-
 
                 FormData.LoginUserId = await this._sessionManag.GetLoginUserIdFromSession();
 
@@ -733,13 +620,11 @@ namespace AdminPanel.Controllers
             }
             catch (Exception ex)
             {
-
                 await this._commonServicesDAL.LogRunTimeExceptionDAL(ex.Message, ex.StackTrace, ex.StackTrace);
 
                 return Json(new { success = false, message = "An error occured on server side.", ExMsg = ex.Message });
             }
         }
-
 
         [HttpGet]
         [RolesRightsAuthorizationHelper((int)EntitiesEnum.VendorPayments, 0, 0, 0, (short)UserRightsEnum.View_All, (short)UserRightsEnum.View_Self)]
@@ -747,7 +632,6 @@ namespace AdminPanel.Controllers
         {
             // ✅ Main Model
             AccountsModel model = new AccountsModel();
-
             #region page basic info
             model.PageBasicInfoObj = new PageBasicInfo();
             model.PageBasicInfoObj.PageTitle = "Vendors Payments";
@@ -755,10 +639,8 @@ namespace AdminPanel.Controllers
             model.PageBasicInfoObj.langCode = await _sessionManag.GetLanguageCodeFromSession();
             #endregion
 
-
             try
             {
-
                 #region ViewSelf Right Check
                 bool SelfRight = await _sessionManag.GetViewSelfRightForLoginUserFromSession();
                 if (SelfRight)
@@ -785,19 +667,13 @@ namespace AdminPanel.Controllers
                     //-- merge vendors total orders amount in the vendors payments list
                     foreach (var item in model.VendorsPaymentsList)
                     {
-                        
                         item.VendorTotalCredit = Math.Round((model?.VendorsOrdersTotalReceivedBalanceList?.FirstOrDefault(x => x.VendorId == item.VendorId)?.VendorTotalCredit ?? 0) ,2 );
                         item.VendorTotalDebit = Math.Round((model?.VendorsOrdersTotalReceivedBalanceList?.FirstOrDefault(x => x.VendorId == item.VendorId)?.VendorTotalDebit ?? 0), 2);
                         item.VendorOrdersTotal = Math.Round((model?.VendorsOrdersTotalReceivedBalanceList?.FirstOrDefault(x => x.VendorId == item.VendorId)?.VendorOrdersTotal ?? 0) ,2 );
                         item.TotalReceived = Math.Round((model?.VendorsOrdersTotalReceivedBalanceList?.FirstOrDefault(x => x.VendorId == item.VendorId)?.TotalReceived ?? 0) ,2 );
                         item.TotalBalance = Math.Round((model?.VendorsOrdersTotalReceivedBalanceList?.FirstOrDefault(x => x.VendorId == item.VendorId)?.TotalBalance ?? 0) ,2 );
                     }
-
-
                 }
-
-
-
 
                 #region pagination data
                 model.pageHelperObj = new PagerHelper();
@@ -810,17 +686,14 @@ namespace AdminPanel.Controllers
                     var ExcelFileResutl = await this._filesHelpers.ExportToExcel(this, model.PageBasicInfoObj.PageTitle, model.VendorsPaymentsList.Cast<dynamic?>().ToList());
                     return ExcelFileResutl;
                 }
-
             }
             catch (Exception ex)
             {
                 await this._commonServicesDAL.LogRunTimeExceptionDAL(ex.Message, ex.StackTrace, ex.StackTrace);
-
                 #region error model
                 model.SuccessErrorMsgEntityObj = new SuccessErrorMsgEntity();
                 model.SuccessErrorMsgEntityObj.ErrorMsg = "An error occured. Please try again.";
                 #endregion
-
             }
 
             if (HttpContext.Request.Headers["X-Requested-With"] == "XMLHttpRequest")//if request is ajax
@@ -835,15 +708,11 @@ namespace AdminPanel.Controllers
         [RolesRightsAuthorizationHelper((int)EntitiesEnum.VendorAccountsTransaction, 0, 0, 0, (short)UserRightsEnum.View_All, (short)UserRightsEnum.View_Self)]
         public async Task<IActionResult> VendorAccountsTransaction(AccountTransactionsDetail FormData)
         {
-
             #region Basic page setting area
             ViewBag.ThemeFormValidationScriptEnabled = true;
             #endregion
-
-
             // ✅ Main Model
             AccountsModel model = new AccountsModel();
-
             #region page basic info
             model.PageBasicInfoObj = new PageBasicInfo();
             model.PageBasicInfoObj.PageTitle = "Account Transactions";
@@ -852,10 +721,8 @@ namespace AdminPanel.Controllers
             ViewBag.VendorId = FormData.VendorId;
             #endregion
 
-
             try
             {
-
                 #region ViewSelf Right Check
                 bool SelfRight = await _sessionManag.GetViewSelfRightForLoginUserFromSession();
                 if (SelfRight)
@@ -901,11 +768,8 @@ namespace AdminPanel.Controllers
                 model.UserObj = new UserEntity();
                 model.UserObj =  _basicDataDAL.GetUserDataByUserID(FormData.VendorId);
 
-
-
                 FormData.PageSize = this._constants.ITEMS_PER_PAGE();
                 model.AccountTransactionsDetailList = await _accountsServicesDAL.GetAccountTransDetailByVendorIdDAL(FormData);
-
 
                 #region pagination data
                 model.pageHelperObj = new PagerHelper();
@@ -918,17 +782,14 @@ namespace AdminPanel.Controllers
                     var ExcelFileResutl = await this._filesHelpers.ExportToExcel(this, model.PageBasicInfoObj.PageTitle, model.AccountTransactionsDetailList.Cast<dynamic?>().ToList());
                     return ExcelFileResutl;
                 }
-
             }
             catch (Exception ex)
             {
                 await this._commonServicesDAL.LogRunTimeExceptionDAL(ex.Message, ex.StackTrace, ex.StackTrace);
-
                 #region error model
                 model.SuccessErrorMsgEntityObj = new SuccessErrorMsgEntity();
                 model.SuccessErrorMsgEntityObj.ErrorMsg = "An error occured. Please try again.";
                 #endregion
-
             }
 
             if (HttpContext.Request.Headers["X-Requested-With"] == "XMLHttpRequest")//if request is ajax
@@ -943,7 +804,6 @@ namespace AdminPanel.Controllers
         [RolesRightsAuthorizationHelper((int)EntitiesEnum.VendorAccountsTransaction, (short)UserRightsEnum.Add, 0, 0, 0, 0)]
         public async Task<IActionResult> CreateVendorAccountTransaction(AccountTransactionsDetail FormData)
         {
-
             try
             {
                 // ✅ Main Model
@@ -966,17 +826,12 @@ namespace AdminPanel.Controllers
                 ValidationMsg = FormData != null && !String.IsNullOrWhiteSpace(FormData?.BankAccountId > 0 ? FormData.BankAccountId.ToString() : "") ? "Form is valid" : "Bank account is required!";
                 validationList.Add(ValidationMsg);
 
-
                 if (validationList.Count() > 0 && validationList.Where(a => a != "Form is valid").ToList().Count > 0)
                 {
                     return Json(new { success = false, message = validationList.FirstOrDefault(x => x != "Form is valid") });
                 }
 
                 #endregion
-
-
-
-
                 #region image file conversion secion
                 List<ImageFileInfo> ImageFileInfosList = new List<ImageFileInfo>();
                 if (FormData != null && FormData.AccountTransAttachementFile != null && FormData.AccountTransAttachementFile.Length > 0)
@@ -994,11 +849,8 @@ namespace AdminPanel.Controllers
 
                             //--save attachment url in database
                             int AttachmentId = await this._commonServicesDAL.SaveUpdateAttachmentDAL(atch);
-
                             ImageFileInfosList.Add(new ImageFileInfo { AttachmentId = AttachmentId, ImageName = photo.FileName, ImageGuidName = "", ImageURL = url });
-
                         }
-
                     }
 
                     if (ImageFileInfosList != null && ImageFileInfosList.Count > 0)
@@ -1011,7 +863,6 @@ namespace AdminPanel.Controllers
                     }
                 }
                 #endregion
-
 
                 var LoginUserId = await this._sessionManag.GetLoginUserIdFromSession();
                 FormData.LoginUserId = LoginUserId ?? 0;
@@ -1027,21 +878,12 @@ namespace AdminPanel.Controllers
                 {
                     return Json(new { success = false, message = result });
                 }
-
-
             }
             catch (Exception ex)
             {
-
                 await this._commonServicesDAL.LogRunTimeExceptionDAL(ex.Message, ex.StackTrace, ex.StackTrace);
-
                 return Json(new { success = false, message = "An error occured on server side.", ExMsg = ex.Message });
             }
-
-
-
-
-
         }
 
         [HttpGet]
@@ -1057,7 +899,6 @@ namespace AdminPanel.Controllers
                 }
 
                 model.AccountTransactionsDetailObj = await _accountsServicesDAL.GetAccountTransEditFormDataByIdDAL(FormData.TransId);
-
             }
             catch (Exception ex)
             {
@@ -1067,7 +908,6 @@ namespace AdminPanel.Controllers
                 model.SuccessErrorMsgEntityObj = new SuccessErrorMsgEntity();
                 model.SuccessErrorMsgEntityObj.ErrorMsg = "An error occured. Please try again.";
                 #endregion
-
             }
 
             return Json(model.AccountTransactionsDetailObj);
@@ -1077,14 +917,12 @@ namespace AdminPanel.Controllers
         [RolesRightsAuthorizationHelper((int)EntitiesEnum.VendorAccountsTransaction, (short)UserRightsEnum.Add, 0, 0, 0, 0)]
         public async Task<IActionResult> UpdateVendorAccountTransaction(AccountTransactionsDetail FormData)
         {
-
             try
             {
                 // ✅ Main Model
                 AccountsModel model = new AccountsModel();
                 string ValidationMsg = "Form is valid";
                 List<string> validationList = new List<string>();
-
                 #region validation area
 
                 ValidationMsg = FormData == null ? "Form is null!" : "Form is valid";
@@ -1102,16 +940,12 @@ namespace AdminPanel.Controllers
                 ValidationMsg = FormData != null && !String.IsNullOrWhiteSpace(FormData?.BankAccountId > 0 ? FormData.BankAccountId.ToString() : "") ? "Form is valid" : "Bank account is required!";
                 validationList.Add(ValidationMsg);
 
-
                 if (validationList.Count() > 0 && validationList.Where(a => a != "Form is valid").ToList().Count > 0)
                 {
                     return Json(new { success = false, message = validationList.FirstOrDefault(x => x != "Form is valid") });
                 }
 
                 #endregion
-
-
-
 
                 #region image file conversion secion
                 List<ImageFileInfo> ImageFileInfosList = new List<ImageFileInfo>();
@@ -1132,9 +966,7 @@ namespace AdminPanel.Controllers
                             int AttachmentId = await this._commonServicesDAL.SaveUpdateAttachmentDAL(atch);
 
                             ImageFileInfosList.Add(new ImageFileInfo { AttachmentId = AttachmentId, ImageName = photo.FileName, ImageGuidName = "", ImageURL = url });
-
                         }
-
                     }
 
                     if (ImageFileInfosList != null && ImageFileInfosList.Count > 0)
@@ -1147,7 +979,6 @@ namespace AdminPanel.Controllers
                     }
                 }
                 #endregion
-
 
                 var LoginUserId = await this._sessionManag.GetLoginUserIdFromSession();
                 FormData.LoginUserId = LoginUserId ?? 0;
@@ -1163,23 +994,13 @@ namespace AdminPanel.Controllers
                 {
                     return Json(new { success = false, message = result });
                 }
-
-
             }
             catch (Exception ex)
             {
-
                 await this._commonServicesDAL.LogRunTimeExceptionDAL(ex.Message, ex.StackTrace, ex.StackTrace);
-
                 return Json(new { success = false, message = "An error occured on server side.", ExMsg = ex.Message });
             }
-
-
-
-
-
         }
-
 
         [HttpGet]
         public async Task<IActionResult> GetAccountTransEditFormAttachmentsId(AccountTransactionsDetail FormData)
@@ -1201,18 +1022,14 @@ namespace AdminPanel.Controllers
                     PageSize = 20
                 };
                 model.AccountTransAttachmentList = await _accountsServicesDAL.GetAccountTransEditFormAttachmentsDAL(accountTransAttachmentEntity);
-
-
             }
             catch (Exception ex)
             {
                 await this._commonServicesDAL.LogRunTimeExceptionDAL(ex.Message, ex.StackTrace, ex.StackTrace);
-
                 #region error model
                 model.SuccessErrorMsgEntityObj = new SuccessErrorMsgEntity();
                 model.SuccessErrorMsgEntityObj.ErrorMsg = "An error occured. Please try again.";
                 #endregion
-
             }
 
             return PartialView("~/Views/Accounts/PartialViews/_AccountTransEditFormAttachment.cshtml", model);
@@ -1223,10 +1040,8 @@ namespace AdminPanel.Controllers
         [RolesRightsAuthorizationHelper((int)EntitiesEnum.VendorAccountsTransaction, 0, 0, (short)UserRightsEnum.Delete, 0, 0)]
         public async Task<IActionResult> DeleteAccountTransactionAttachment(string primarykeyValue, string primaryKeyColumn, string tableName, string AttachmentURL, int SqlDeleteType = (short)SqlDeleteTypes.PlainTableDelete)
         {
-
             try
             {
-
                 bool result = await _commonServicesDAL.DeleteAnyRecordDAL(primarykeyValue, primaryKeyColumn, tableName, SqlDeleteType);
                 if (result)
                 {
@@ -1235,8 +1050,6 @@ namespace AdminPanel.Controllers
                     {
                         System.IO.File.Delete(path);
                     }
-
-
                     return Json(new { success = true, message = "Deleted Successfully!" });
                 }
                 else
@@ -1246,14 +1059,9 @@ namespace AdminPanel.Controllers
             }
             catch (Exception ex)
             {
-
                 await this._commonServicesDAL.LogRunTimeExceptionDAL(ex.Message, ex.StackTrace, ex.StackTrace);
-
                 return Json(new { success = false, message = "An error occured on server side.", ExMsg = ex.Message });
             }
-
-
         }
-
     }
 }

@@ -28,3 +28,18 @@ D:\Code\ecommerce\.NET 8 Version - Latest\project\NoorECommerce\Entities\obj\Deb
 D:\Code\ecommerce\.NET 8 Version - Latest\project\NoorECommerce\Entities\obj\Debug\net8.0\Entities.pdb
 D:\Code\ecommerce\.NET 8 Version - Latest\project\NoorECommerce\Entities\obj\Debug\net8.0\Entities.genruntimeconfig.cache
 D:\Code\ecommerce\.NET 8 Version - Latest\project\NoorECommerce\Entities\obj\Debug\net8.0\ref\Entities.dll
+D:\Code\itage-shop\Entities\bin\Debug\net8.0\Entities.deps.json
+D:\Code\itage-shop\Entities\bin\Debug\net8.0\Entities.runtimeconfig.json
+D:\Code\itage-shop\Entities\bin\Debug\net8.0\Entities.dll
+D:\Code\itage-shop\Entities\bin\Debug\net8.0\Entities.pdb
+D:\Code\itage-shop\Entities\obj\Debug\net8.0\Entities.csproj.AssemblyReference.cache
+D:\Code\itage-shop\Entities\obj\Debug\net8.0\Entities.GeneratedMSBuildEditorConfig.editorconfig
+D:\Code\itage-shop\Entities\obj\Debug\net8.0\Entities.AssemblyInfoInputs.cache
+D:\Code\itage-shop\Entities\obj\Debug\net8.0\Entities.AssemblyInfo.cs
+D:\Code\itage-shop\Entities\obj\Debug\net8.0\Entities.csproj.CoreCompileInputs.cache
+D:\Code\itage-shop\Entities\obj\Debug\net8.0\Entities.sourcelink.json
+D:\Code\itage-shop\Entities\obj\Debug\net8.0\Entities.dll
+D:\Code\itage-shop\Entities\obj\Debug\net8.0\refint\Entities.dll
+D:\Code\itage-shop\Entities\obj\Debug\net8.0\Entities.pdb
+D:\Code\itage-shop\Entities\obj\Debug\net8.0\Entities.genruntimeconfig.cache
+D:\Code\itage-shop\Entities\obj\Debug\net8.0\ref\Entities.dll

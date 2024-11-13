@@ -12,7 +12,6 @@ namespace AdminPanel.Controllers
 {
     public class AuthenticationController : Controller
     {
-
         private readonly ICommonServicesDAL _commonServicesDAL;
         private readonly ISessionManager _sessionManag;
         private readonly IEmailSender _emailSender;
@@ -28,7 +27,6 @@ namespace AdminPanel.Controllers
             this._userManagementServicesDAL = userManagementServicesDAL;
             this._configuration = configuration;
         }
-
 
         [HttpGet]
         public IActionResult Login()
@@ -57,7 +55,6 @@ namespace AdminPanel.Controllers
                         #region set User Data
                         this._sessionManag.SetUserDataInSession(usr);
                         #endregion
-
 
                         #region set Menus
                         this._sessionManag.SetMenusInSession();
@@ -96,18 +93,15 @@ namespace AdminPanel.Controllers
             }
             catch (Exception ex)
             {
-
                 await this._commonServicesDAL.LogRunTimeExceptionDAL(ex.Message, ex.StackTrace, ex.StackTrace);
 
                 return Json(new { success = false, message = "An error occured. Please try again", ExMsg = ex.Message });
             }
-
         }
 
         [HttpGet]
         public IActionResult LogoutUser()
         {
-
             string msg = RemoveSessionAndCookies();
             if (msg != "Removed Successfully!")
             {
@@ -116,8 +110,6 @@ namespace AdminPanel.Controllers
 
             return RedirectToAction("Login", "Authentication");
         }
-
-
         public string RemoveSessionAndCookies()
         {
             string result = "Removed Successfully!";
@@ -137,11 +129,8 @@ namespace AdminPanel.Controllers
                     result = "An error occured.";
                     return result;
                 }
-
             }
-
             return result;
-
         }
 
         [HttpGet]
@@ -149,7 +138,6 @@ namespace AdminPanel.Controllers
         {
             return View();
         }
-
 
         [HttpPost]
         public async Task<IActionResult> ValidateEmailAndSendOTP(string recover_email)
@@ -189,10 +177,8 @@ namespace AdminPanel.Controllers
                 catch (Exception ex)
                 {
                     await this._commonServicesDAL.LogRunTimeExceptionDAL(ex.Message, ex.StackTrace, ex.StackTrace);
-
                     return Json(new { success = false, message = "An error occured in sending email. Please try again!" });
                 }
-
 
                 //-- 4. return user success and lets user enter otp that he recieve in email and password and confirm password
                 return Json(new { success = true, message = "An OTP has been sent to your email. Please confirm OTP & enter new password!" });
@@ -200,18 +186,15 @@ namespace AdminPanel.Controllers
             }
             catch (Exception ex)
             {
-
                 await this._commonServicesDAL.LogRunTimeExceptionDAL(ex.Message, ex.StackTrace, ex.StackTrace);
 
                 return Json(new { success = false, message = "An error occured. Please try again", ExMsg = ex.Message });
             }
-
         }
 
         [HttpPost]
         public async Task<IActionResult> ValidateOTPAndChangePassword(string? recover_email, int? Otp, string? Password, string? ConfirmPassword)
         {
-
             #region validation area
 
             if (String.IsNullOrEmpty(recover_email))
@@ -249,10 +232,8 @@ namespace AdminPanel.Controllers
 
             #endregion
 
-
             try
             {
-
                 //-- 1. Valiedate email from data base if exists
                 var user = await _userManagementServicesDAL.GetUserByEmailAddressDAL(recover_email);
                 if (user == null || user.UserId < 1)
@@ -262,57 +243,38 @@ namespace AdminPanel.Controllers
 
                 //-- 2. Validate the OTP from data base
                 var IsValidOTP = await this._userManagementServicesDAL.ValidateOTPByEmailDAL(recover_email, Convert.ToInt32(Otp));
-
                 //--Update the OTP Count by Email
                 string UpdateOTPResponse = await this._userManagementServicesDAL.UpdateOTPAttemptsByEmailDAL(recover_email);
 
-
                 if (IsValidOTP != null && !String.IsNullOrWhiteSpace(IsValidOTP.EmailAddress))
                 {
-
-
                     string PasswordResetResponse = "";
-
                     //-- 3. Reset user password
                     Password = CommonConversionHelper.Encrypt(Password);
                     PasswordResetResponse = await this._userManagementServicesDAL.ResetUserPasswordDAL(recover_email, Password);
-
-
+                    
                     //--De activate otps by email address
                     string DeActivateResponse = await this._userManagementServicesDAL.DeActivateOTPsByEmail(recover_email);
 
-
-
-
                     if (PasswordResetResponse == "Saved Successfully!")
                     {
-
                         return Json(new { success = true, message = "Password reset successfully" });
                     }
                     else
                     {
                         return Json(new { success = false, message = "An error occured. Please try again" });
                     }
-
-
                 }
                 else
                 {
                     return Json(new { success = false, message = "Invalid OTP that you enter!" });
                 }
-
-
-
             }
             catch (Exception ex)
             {
-
                 await this._commonServicesDAL.LogRunTimeExceptionDAL(ex.Message, ex.StackTrace, ex.StackTrace);
-
                 return Json(new { success = false, message = "An error occured. Please try again", ExMsg = ex.Message });
             }
-
         }
-
     }
 }

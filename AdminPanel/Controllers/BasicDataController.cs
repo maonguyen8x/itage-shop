@@ -30,14 +30,12 @@ namespace AdminPanel.Controllers
             this._filesHelpers = filesHelpers;
         }
 
-
         [HttpGet]
         [RolesRightsAuthorizationHelper((int)EntitiesEnum.ColorsList, 0, 0, 0, (short)UserRightsEnum.View_All, (short)UserRightsEnum.View_Self)]
         public async Task<IActionResult> ColorsList(ColorEntity FormData)
         {
             // ✅ Main Model
             BasicDataModel model = new BasicDataModel();
-            
             #region page basic info
             model.PageBasicInfoObj = new PageBasicInfo();
             model.PageBasicInfoObj.PageTitle = "Color List";
@@ -45,13 +43,10 @@ namespace AdminPanel.Controllers
             model.PageBasicInfoObj.langCode = await _sessionManag.GetLanguageCodeFromSession();
             #endregion
 
-          
-
             try
             {
                 FormData.PageSize = this._constants.ITEMS_PER_PAGE();
                 model.ColorsList = await _basicDataDAL.GetColorsListDAL(FormData);
-
              
                 #region pagination data
                 model.pageHelperObj = new PagerHelper();
@@ -59,19 +54,15 @@ namespace AdminPanel.Controllers
                 model.pageHelperObj = PagerHelper.Instance.MakePaginationObject(model?.ColorsList?.Count() ?? 0, TotalRecords, _constants.ITEMS_PER_PAGE(), FormData.PageNo);
                 #endregion
 
-
-
                 if (FormData.DataExportType != null && FormData.DataExportType == (short)DataExportTypeEnum.Excel && model?.ColorsList?.Count > 0)
                 {
                     var ExcelFileResutl = await this._filesHelpers.ExportToExcel(this, model.PageBasicInfoObj.PageTitle, model.ColorsList.Cast<dynamic?>().ToList());
                     return ExcelFileResutl;
                 }
-
             }
             catch (Exception ex)
             {
                 await this._commonServicesDAL.LogRunTimeExceptionDAL(ex.Message, ex.StackTrace, ex.StackTrace);
-
                 #region error model
                 model.SuccessErrorMsgEntityObj = new SuccessErrorMsgEntity();
                 model.SuccessErrorMsgEntityObj.ErrorMsg = "An error occured. Please try again.";
@@ -87,13 +78,10 @@ namespace AdminPanel.Controllers
             return View(model);
         }
 
-
         [HttpPost]
         [RolesRightsAuthorizationHelper((int)EntitiesEnum.ColorsList, (short)UserRightsEnum.Add, (short)UserRightsEnum.Update, 0, 0, 0)]
         public async Task<IActionResult> SaveUpdateColor(ColorEntity FormData, int DataOperationType = (short)DataOperationType.Insert)
         {
-
-
             try
             {
                 if (String.IsNullOrWhiteSpace(FormData.ColorName))
@@ -117,7 +105,6 @@ namespace AdminPanel.Controllers
                     {
                         return Json(new { success = false, message = "ColorId is null!" });
                     }
-
                 }
 
                 FormData.UserId = await this._sessionManag.GetLoginUserIdFromSession();
@@ -134,13 +121,11 @@ namespace AdminPanel.Controllers
             }
             catch (Exception ex)
             {
-
                 await this._commonServicesDAL.LogRunTimeExceptionDAL(ex.Message, ex.StackTrace, ex.StackTrace);
 
                 return Json(new { success = false, message = "An error occured on server side.", ExMsg = ex.Message });
             }
         }
-
 
         [HttpGet]
         [RolesRightsAuthorizationHelper((int)EntitiesEnum.CategoriesList, 0, 0, 0, (short)UserRightsEnum.View_All, (short)UserRightsEnum.View_Self)]
@@ -148,7 +133,6 @@ namespace AdminPanel.Controllers
         {
             // ✅ Main Model
             BasicDataModel model = new BasicDataModel();
-           
             #region page basic info
             model.PageBasicInfoObj = new PageBasicInfo();
             model.PageBasicInfoObj.PageTitle = "Categories List";
@@ -158,7 +142,6 @@ namespace AdminPanel.Controllers
 
             try
             {
-
                 #region ViewSelf Right Check
                 bool SelfRight = await _sessionManag.GetViewSelfRightForLoginUserFromSession();
                 if (SelfRight)
@@ -172,14 +155,11 @@ namespace AdminPanel.Controllers
                 }
                 #endregion
 
-
                 FormData.PageSize = this._constants.ITEMS_PER_PAGE();
                 model.CategoryList = await _basicDataDAL.GetCategoriesListDAL(FormData);
 
                 //--get parent categories
                 model.ParentCategoryList = await _basicDataDAL.GetParentCategoriesListDAL();
-
-              
 
                 #region pagination data
                 model.pageHelperObj = new PagerHelper();
@@ -187,24 +167,19 @@ namespace AdminPanel.Controllers
                 model.pageHelperObj = PagerHelper.Instance.MakePaginationObject(model?.CategoryList?.Count() ?? 0, TotalRecords, _constants.ITEMS_PER_PAGE(), FormData.PageNo);
                 #endregion
 
-
-
                 if (FormData.DataExportType != null && FormData.DataExportType == (short)DataExportTypeEnum.Excel && model?.CategoryList?.Count > 0)
                 {
                     var ExcelFileResutl = await this._filesHelpers.ExportToExcel(this, model.PageBasicInfoObj.PageTitle, model.CategoryList.Cast<dynamic?>().ToList());
                     return ExcelFileResutl;
                 }
-
             }
             catch (Exception ex)
             {
                 await this._commonServicesDAL.LogRunTimeExceptionDAL(ex.Message, ex.StackTrace, ex.StackTrace);
-
                 #region error model
                 model.SuccessErrorMsgEntityObj = new SuccessErrorMsgEntity();
                 model.SuccessErrorMsgEntityObj.ErrorMsg = "An error occured. Please try again.";
                 #endregion
-
             }
 
             if (HttpContext.Request.Headers["X-Requested-With"] == "XMLHttpRequest")//if request is ajax
@@ -215,21 +190,16 @@ namespace AdminPanel.Controllers
             return View(model);
         }
 
-
         [HttpPost]
         [RolesRightsAuthorizationHelper((int)EntitiesEnum.CategoriesList, (short)UserRightsEnum.Add, (short)UserRightsEnum.Update, 0, 0, 0)]
         public async Task<IActionResult> SaveUpdateCategory(CategoryEntity FormData, int DataOperationType = (short)DataOperationType.Insert)
         {
-
-
             try
             {
                 if (String.IsNullOrWhiteSpace(FormData.Name))
                 {
                     return Json(new { success = false, message = "Please fill the name field!" });
                 }
-
-
 
                 if (FormData.IsActive == null)
                 {
@@ -242,7 +212,6 @@ namespace AdminPanel.Controllers
                     {
                         return Json(new { success = false, message = "Category id is null!" });
                     }
-
                 }
 
                 #region image checking
@@ -260,7 +229,6 @@ namespace AdminPanel.Controllers
                         if (FormData.AttachmentId!=null && FormData.AttachmentId>0) //--update case
                         {
                             atch.AttachmentId = Convert.ToInt32(FormData.AttachmentId);
-                           
 
                             //--save attachment url in database
                             int AttachmentId = await this._commonServicesDAL.SaveUpdateAttachmentDAL(atch);
@@ -274,19 +242,12 @@ namespace AdminPanel.Controllers
 
                             FormData.AttachmentId= AttachmentId;
                         }
-
-                      
-
                     }
-
-                   
-
                 }
 
                 #endregion
 
                 FormData.UserId = await this._sessionManag.GetLoginUserIdFromSession();
-
                 string result = await _basicDataDAL.SaveUpdateCategoryDAL(FormData, DataOperationType);
                 if (!String.IsNullOrWhiteSpace(result) && result == "Saved Successfully!")
                 {
@@ -299,7 +260,6 @@ namespace AdminPanel.Controllers
             }
             catch (Exception ex)
             {
-
                 await this._commonServicesDAL.LogRunTimeExceptionDAL(ex.Message, ex.StackTrace, ex.StackTrace);
 
                 return Json(new { success = false, message = "An error occured on server side.", ExMsg = ex.Message });
@@ -324,48 +284,38 @@ namespace AdminPanel.Controllers
             {
                 FormData.PageSize = this._constants.ITEMS_PER_PAGE();
                 model.SizeList = await _basicDataDAL.GetSizeListDAL(FormData);
-
-
                 #region pagination data
                 model.pageHelperObj = new PagerHelper();
                 int TotalRecords = model?.SizeList?.FirstOrDefault()?.TotalRecords ?? 0;
                 model.pageHelperObj = PagerHelper.Instance.MakePaginationObject(model?.SizeList?.Count() ?? 0, TotalRecords, _constants.ITEMS_PER_PAGE(), FormData.PageNo);
                 #endregion
 
-
-
                 if (FormData.DataExportType != null && FormData.DataExportType == (short)DataExportTypeEnum.Excel && model?.SizeList?.Count > 0)
                 {
                     var ExcelFileResutl = await this._filesHelpers.ExportToExcel(this, model.PageBasicInfoObj.PageTitle, model.SizeList.Cast<dynamic?>().ToList());
                     return ExcelFileResutl;
                 }
-
             }
             catch (Exception ex)
             {
                 await this._commonServicesDAL.LogRunTimeExceptionDAL(ex.Message, ex.StackTrace, ex.StackTrace);
-
                 #region error model
                 model.SuccessErrorMsgEntityObj = new SuccessErrorMsgEntity();
                 model.SuccessErrorMsgEntityObj.ErrorMsg = "An error occured. Please try again.";
                 #endregion
-
             }
 
             if (HttpContext.Request.Headers["X-Requested-With"] == "XMLHttpRequest")//if request is ajax
             {
                 return PartialView("~/Views/BasicData/PartialViews/_SizeList.cshtml", model);
             }
-
             return View(model);
         }
-
 
         [HttpPost]
         [RolesRightsAuthorizationHelper((int)EntitiesEnum.SizesList, (short)UserRightsEnum.Add, (short)UserRightsEnum.Update, 0, 0, 0)]
         public async Task<IActionResult> SaveUpdateSize(SizeEntity FormData, int DataOperationType = (short)DataOperationType.Insert)
         {
-
             try
             {
                 if (String.IsNullOrWhiteSpace(FormData.Name))
@@ -393,7 +343,6 @@ namespace AdminPanel.Controllers
                     {
                         return Json(new { success = false, message = "Size id is null!" });
                     }
-
                 }
 
                 FormData.UserId = await this._sessionManag.GetLoginUserIdFromSession();
@@ -410,13 +359,11 @@ namespace AdminPanel.Controllers
             }
             catch (Exception ex)
             {
-
                 await this._commonServicesDAL.LogRunTimeExceptionDAL(ex.Message, ex.StackTrace, ex.StackTrace);
 
                 return Json(new { success = false, message = "An error occured on server side.", ExMsg = ex.Message });
             }
         }
-
 
         [HttpGet]
         [RolesRightsAuthorizationHelper((int)EntitiesEnum.ManufacturersList, 0, 0, 0, (short)UserRightsEnum.View_All, (short)UserRightsEnum.View_Self)]
@@ -424,7 +371,6 @@ namespace AdminPanel.Controllers
         {
             // ✅ Main Model
             BasicDataModel model = new BasicDataModel();
-           
             #region page basic info
             model.PageBasicInfoObj = new PageBasicInfo();
             model.PageBasicInfoObj.PageTitle = "Manufacturers List";
@@ -437,16 +383,11 @@ namespace AdminPanel.Controllers
                 FormData.PageSize = this._constants.ITEMS_PER_PAGE();
                 model.ManufacturerList = await _basicDataDAL.GetManufacturerListDAL(FormData);
 
-
-             
-
                 #region pagination data
                 model.pageHelperObj = new PagerHelper();
                 int TotalRecords = model?.ManufacturerList?.FirstOrDefault()?.TotalRecords ?? 0;
                 model.pageHelperObj = PagerHelper.Instance.MakePaginationObject(model?.ManufacturerList?.Count() ?? 0, TotalRecords, _constants.ITEMS_PER_PAGE(), FormData.PageNo);
                 #endregion
-
-
 
                 if (FormData.DataExportType != null && FormData.DataExportType == (short)DataExportTypeEnum.Excel && model?.ManufacturerList?.Count > 0)
                 {
@@ -458,12 +399,10 @@ namespace AdminPanel.Controllers
             catch (Exception ex)
             {
                 await this._commonServicesDAL.LogRunTimeExceptionDAL(ex.Message, ex.StackTrace, ex.StackTrace);
-
                 #region error model
                 model.SuccessErrorMsgEntityObj = new SuccessErrorMsgEntity();
                 model.SuccessErrorMsgEntityObj.ErrorMsg = "An error occured. Please try again.";
                 #endregion
-
             }
 
             if (HttpContext.Request.Headers["X-Requested-With"] == "XMLHttpRequest")//if request is ajax
@@ -478,7 +417,6 @@ namespace AdminPanel.Controllers
         [RolesRightsAuthorizationHelper((int)EntitiesEnum.ManufacturersList, (short)UserRightsEnum.Add, (short)UserRightsEnum.Update, 0, 0, 0)]
         public async Task<IActionResult> SaveUpdateManufacturer(ManufacturerEntity FormData, int DataOperationType = (short)DataOperationType.Insert)
         {
-
             try
             {
                 if (String.IsNullOrWhiteSpace(FormData.Name))
@@ -497,7 +435,6 @@ namespace AdminPanel.Controllers
                     {
                         return Json(new { success = false, message = "Manufacturer id is null!" });
                     }
-
                 }
 
                 FormData.UserId = await this._sessionManag.GetLoginUserIdFromSession();
@@ -514,9 +451,7 @@ namespace AdminPanel.Controllers
             }
             catch (Exception ex)
             {
-
                 await this._commonServicesDAL.LogRunTimeExceptionDAL(ex.Message, ex.StackTrace, ex.StackTrace);
-
                 return Json(new { success = false, message = "An error occured on server side.", ExMsg = ex.Message });
             }
         }
@@ -527,7 +462,6 @@ namespace AdminPanel.Controllers
         {
             // ✅ Main Model
             BasicDataModel model = new BasicDataModel();
-    
             #region page basic info
             model.PageBasicInfoObj = new PageBasicInfo();
             model.PageBasicInfoObj.PageTitle = "Currencies List";
@@ -540,33 +474,25 @@ namespace AdminPanel.Controllers
                 FormData.PageSize = this._constants.ITEMS_PER_PAGE();
                 model.CurrenciesList = await _basicDataDAL.GetCurrenciesListDAL(FormData);
 
-
-            
-
                 #region pagination data
                 model.pageHelperObj = new PagerHelper();
                 int TotalRecords = model?.CurrenciesList?.FirstOrDefault()?.TotalRecords ?? 0;
                 model.pageHelperObj = PagerHelper.Instance.MakePaginationObject(model?.CurrenciesList?.Count() ?? 0, TotalRecords, _constants.ITEMS_PER_PAGE(), FormData.PageNo);
                 #endregion
 
-
-
                 if (FormData.DataExportType != null && FormData.DataExportType == (short)DataExportTypeEnum.Excel && model?.CurrenciesList?.Count > 0)
                 {
                     var ExcelFileResutl = await this._filesHelpers.ExportToExcel(this, model.PageBasicInfoObj.PageTitle, model.CurrenciesList.Cast<dynamic?>().ToList());
                     return ExcelFileResutl;
                 }
-
             }
             catch (Exception ex)
             {
                 await this._commonServicesDAL.LogRunTimeExceptionDAL(ex.Message, ex.StackTrace, ex.StackTrace);
-
                 #region error model
                 model.SuccessErrorMsgEntityObj = new SuccessErrorMsgEntity();
                 model.SuccessErrorMsgEntityObj.ErrorMsg = "An error occured. Please try again.";
                 #endregion
-
             }
 
             if (HttpContext.Request.Headers["X-Requested-With"] == "XMLHttpRequest")//if request is ajax
@@ -581,14 +507,12 @@ namespace AdminPanel.Controllers
         [RolesRightsAuthorizationHelper((int)EntitiesEnum.CurrenciesList, (short)UserRightsEnum.Add, (short)UserRightsEnum.Update, 0, 0, 0)]
         public async Task<IActionResult> SaveUpdateCurrency(CurrencyEntity FormData, int DataOperationType = (short)DataOperationType.Insert)
         {
-
             try
             {
                 if (String.IsNullOrWhiteSpace(FormData.CurrencyName) || String.IsNullOrWhiteSpace(FormData.CurrencyCode))
                 {
                     return Json(new { success = false, message = "Please fill Currency Name and Currency Code fields!" });
                 }
-
 
                 if (FormData.IsActive == null)
                 {
@@ -601,7 +525,6 @@ namespace AdminPanel.Controllers
                     {
                         return Json(new { success = false, message = "Currency id is null!" });
                     }
-
                 }
 
                 FormData.UserId = await this._sessionManag.GetLoginUserIdFromSession();
@@ -618,13 +541,11 @@ namespace AdminPanel.Controllers
             }
             catch (Exception ex)
             {
-
                 await this._commonServicesDAL.LogRunTimeExceptionDAL(ex.Message, ex.StackTrace, ex.StackTrace);
 
                 return Json(new { success = false, message = "An error occured on server side.", ExMsg = ex.Message });
             }
         }
-
 
         [HttpGet]
         [RolesRightsAuthorizationHelper((int)EntitiesEnum.AttachmentTypesList, 0, 0, 0, (short)UserRightsEnum.View_All, (short)UserRightsEnum.View_Self)]
@@ -632,7 +553,6 @@ namespace AdminPanel.Controllers
         {
             // ✅ Main Model
             BasicDataModel model = new BasicDataModel();
-
             #region page basic info
             model.PageBasicInfoObj = new PageBasicInfo();
             model.PageBasicInfoObj.PageTitle = "Attachment Types List";
@@ -650,7 +570,6 @@ namespace AdminPanel.Controllers
                 int TotalRecords = model?.AttachmentTypeList?.FirstOrDefault()?.TotalRecords ?? 0;
                 model.pageHelperObj = PagerHelper.Instance.MakePaginationObject(model?.AttachmentTypeList?.Count() ?? 0, TotalRecords, _constants.ITEMS_PER_PAGE(), FormData.PageNo);
                 #endregion
-
             }
             catch (Exception ex)
             {
@@ -660,7 +579,6 @@ namespace AdminPanel.Controllers
                 model.SuccessErrorMsgEntityObj = new SuccessErrorMsgEntity();
                 model.SuccessErrorMsgEntityObj.ErrorMsg = "An error occured. Please try again.";
                 #endregion
-
             }
 
             if (HttpContext.Request.Headers["X-Requested-With"] == "XMLHttpRequest")//if request is ajax
@@ -671,14 +589,12 @@ namespace AdminPanel.Controllers
             return View(model);
         }
 
-
         [HttpGet]
         [RolesRightsAuthorizationHelper((int)EntitiesEnum.PaymentMethodsList, 0, 0, 0, (short)UserRightsEnum.View_All, (short)UserRightsEnum.View_Self)]
         public async Task<IActionResult> PaymentMethodsList(PaymentMethodEntity FormData)
         {
             // ✅ Main Model
             BasicDataModel model = new BasicDataModel();
-
             #region page basic info
             model.PageBasicInfoObj = new PageBasicInfo();
             model.PageBasicInfoObj.PageTitle = "Payment Methods List";
@@ -690,25 +606,19 @@ namespace AdminPanel.Controllers
             {
                 FormData.PageSize = this._constants.ITEMS_PER_PAGE();
                 model.PaymentMethodsList = await _basicDataDAL.GetPaymentMethodsListDAL(FormData);
-
-
                 #region pagination data
                 model.pageHelperObj = new PagerHelper();
                 int TotalRecords = model?.PaymentMethodsList?.FirstOrDefault()?.TotalRecords ?? 0;
                 model.pageHelperObj = PagerHelper.Instance.MakePaginationObject(model?.PaymentMethodsList?.Count() ?? 0, TotalRecords, _constants.ITEMS_PER_PAGE(), FormData.PageNo);
                 #endregion
-
-
             }
             catch (Exception ex)
             {
                 await this._commonServicesDAL.LogRunTimeExceptionDAL(ex.Message, ex.StackTrace, ex.StackTrace);
-
                 #region error model
                 model.SuccessErrorMsgEntityObj = new SuccessErrorMsgEntity();
                 model.SuccessErrorMsgEntityObj.ErrorMsg = "An error occured. Please try again.";
                 #endregion
-
             }
 
             if (HttpContext.Request.Headers["X-Requested-With"] == "XMLHttpRequest")//if request is ajax
@@ -723,14 +633,12 @@ namespace AdminPanel.Controllers
         [RolesRightsAuthorizationHelper((int)EntitiesEnum.PaymentMethodsList, (short)UserRightsEnum.Add, (short)UserRightsEnum.Update, 0, 0, 0)]
         public async Task<IActionResult> SaveUpdatePaymentMethod(PaymentMethodEntity FormData, int DataOperationType = (short)DataOperationType.Insert)
         {
-
             try
             {
                 if (String.IsNullOrWhiteSpace(FormData.PaymentMethodName))
                 {
                     return Json(new { success = false, message = "Please fill the payment method field!" });
                 }
-
 
                 if (FormData.IsActive == null)
                 {
@@ -743,7 +651,6 @@ namespace AdminPanel.Controllers
                     {
                         return Json(new { success = false, message = "Manufacturer id is null!" });
                     }
-
                 }
 
                 FormData.UserId = await this._sessionManag.GetLoginUserIdFromSession();
@@ -760,13 +667,11 @@ namespace AdminPanel.Controllers
             }
             catch (Exception ex)
             {
-
                 await this._commonServicesDAL.LogRunTimeExceptionDAL(ex.Message, ex.StackTrace, ex.StackTrace);
 
                 return Json(new { success = false, message = "An error occured on server side.", ExMsg = ex.Message });
             }
         }
-
 
         [HttpGet]
         [RolesRightsAuthorizationHelper((int)EntitiesEnum.TagsList, 0, 0, 0, (short)UserRightsEnum.View_All, (short)UserRightsEnum.View_Self)]
@@ -774,7 +679,6 @@ namespace AdminPanel.Controllers
         {
             // ✅ Main Model
             BasicDataModel model = new BasicDataModel();
-
             #region page basic info
             model.PageBasicInfoObj = new PageBasicInfo();
             model.PageBasicInfoObj.PageTitle = "Tags List";
@@ -784,7 +688,6 @@ namespace AdminPanel.Controllers
 
             try
             {
-
                 #region ViewSelf Right Check
                 bool SelfRight = await _sessionManag.GetViewSelfRightForLoginUserFromSession();
                 if (SelfRight)
@@ -800,31 +703,25 @@ namespace AdminPanel.Controllers
 
                 FormData.PageSize = this._constants.ITEMS_PER_PAGE();
                 model.TagsList = await _basicDataDAL.GetTagsListDAL(FormData);
-
-
                 #region pagination data
                 model.pageHelperObj = new PagerHelper();
                 int TotalRecords = model?.TagsList?.FirstOrDefault()?.TotalRecords ?? 0;
                 model.pageHelperObj = PagerHelper.Instance.MakePaginationObject(model?.TagsList?.Count() ?? 0, TotalRecords, _constants.ITEMS_PER_PAGE(), FormData.PageNo);
                 #endregion
 
-
                 if (FormData.DataExportType != null && FormData.DataExportType == (short)DataExportTypeEnum.Excel && model?.TagsList?.Count > 0)
                 {
                     var ExcelFileResutl = await this._filesHelpers.ExportToExcel(this, model.PageBasicInfoObj.PageTitle, model.TagsList.Cast<dynamic?>().ToList());
                     return ExcelFileResutl;
                 }
-
             }
             catch (Exception ex)
             {
                 await this._commonServicesDAL.LogRunTimeExceptionDAL(ex.Message, ex.StackTrace, ex.StackTrace);
-
                 #region error model
                 model.SuccessErrorMsgEntityObj = new SuccessErrorMsgEntity();
                 model.SuccessErrorMsgEntityObj.ErrorMsg = "An error occured. Please try again.";
                 #endregion
-
             }
 
             if (HttpContext.Request.Headers["X-Requested-With"] == "XMLHttpRequest")//if request is ajax
@@ -835,19 +732,16 @@ namespace AdminPanel.Controllers
             return View(model);
         }
 
-
         [HttpPost]
         [RolesRightsAuthorizationHelper((int)EntitiesEnum.TagsList, (short)UserRightsEnum.Add, (short)UserRightsEnum.Update, 0, 0, 0)]
         public async Task<IActionResult> SaveUpdateTag(TagEntity FormData, int DataOperationType = (short)DataOperationType.Insert)
         {
-
             try
             {
                 if (String.IsNullOrWhiteSpace(FormData.TagName))
                 {
                     return Json(new { success = false, message = "Please fill the tag name field!" });
                 }
-
 
                 if (FormData.IsActive == null)
                 {
@@ -860,7 +754,6 @@ namespace AdminPanel.Controllers
                     {
                         return Json(new { success = false, message = "Tag Id is null!" });
                     }
-
                 }
 
                 FormData.UserId = await this._sessionManag.GetLoginUserIdFromSession();
@@ -877,13 +770,9 @@ namespace AdminPanel.Controllers
             }
             catch (Exception ex)
             {
-
                 await this._commonServicesDAL.LogRunTimeExceptionDAL(ex.Message, ex.StackTrace, ex.StackTrace);
-
                 return Json(new { success = false, message = "An error occured on server side.", ExMsg = ex.Message });
             }
         }
-
     }
-
 }

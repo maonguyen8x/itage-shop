@@ -15,7 +15,6 @@ namespace AdminPanel.Controllers
 {
     public class HomeController : BaseController
     {
-
         private readonly IHomeServicesDAL _homeServicesDAL;
         private readonly IConstants _constants;
         private readonly ISessionManager _sessionManag;
@@ -34,7 +33,6 @@ namespace AdminPanel.Controllers
         {
             // ✅ Main Model
             HomeModel model = new HomeModel();
-
             #region page basic info
             model.PageBasicInfoObj = new PageBasicInfo();
             model.PageBasicInfoObj.EntityId = (int)EntitiesEnum.Dashboard;
@@ -49,18 +47,14 @@ namespace AdminPanel.Controllers
         {
             // ✅ Main Model
             HomeModel model = new HomeModel();
-
             #region page basic info
             model.PageBasicInfoObj = new PageBasicInfo();
             model.PageBasicInfoObj.EntityId = (int)EntitiesEnum.Dashboard;
             model.PageBasicInfoObj.langCode = await _sessionManag.GetLanguageCodeFromSession();
             #endregion
 
-
-
             try
             {
-
                 // -- only get login vendor list if user login is of vendor type
                 var LoginUser = _sessionManag.GetLoginUserFromSession();
                 int LoginUserId = 0;
@@ -76,7 +70,6 @@ namespace AdminPanel.Controllers
                     model.dashboardLifeTimeStatistics.TotalUsers = 0;
                 }
                 #endregion
-
 
                 #region sales per month
                 model.SalesPerMonthData = await this._homeServicesDAL.GetChartSalesPerMonthDataDAL(FromDate, ToDate, LoginUserId);
@@ -124,8 +117,6 @@ namespace AdminPanel.Controllers
                 }
                 #endregion
 
-
-
                 model.CustomersLocationWiseData = await this._homeServicesDAL.GetChartCustomersLocationWiseDataDAL(FromDate, ToDate, LoginUserId);
 
                 #region popular products
@@ -136,17 +127,14 @@ namespace AdminPanel.Controllers
                     prd.ChartLabel = StringConversionHelper.TruncateAnyStringValue(prd.ChartLabel, 10, true);
                 }
                 #endregion
-
             }
             catch (Exception ex)
             {
                 await this._commonServicesDAL.LogRunTimeExceptionDAL(ex.Message, ex.StackTrace, ex.StackTrace);
-
                 #region error model
                 model.SuccessErrorMsgEntityObj = new SuccessErrorMsgEntity();
                 model.SuccessErrorMsgEntityObj.ErrorMsg = "An error occured. Please try again.";
                 #endregion
-
             }
 
             return PartialView("~/Views/Home/PartialViews/_DashboardChart.cshtml", model);
@@ -156,10 +144,5 @@ namespace AdminPanel.Controllers
         {
             return View();
         }
-
-
-     
-
-
     }
 }

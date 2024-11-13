@@ -40,7 +40,6 @@ namespace AdminPanel.Controllers
         {
             // ✅ Main Model
             NotificationsModel model = new NotificationsModel();
-
             #region page basic info
             model.PageBasicInfoObj = new PageBasicInfo();
             model.PageBasicInfoObj.PageTitle = "Admin Panel Notifications";
@@ -48,12 +47,10 @@ namespace AdminPanel.Controllers
             model.PageBasicInfoObj.langCode = await _sessionManag.GetLanguageCodeFromSession();
             #endregion
 
-
             try
             {
                 FormData.PageSize = this._constants.ITEMS_PER_PAGE();
                 model.AdminPanelNotificationsList = await _notificationsServicesDAL.GetAdminPanelNotificationsListDAL(FormData);
-
 
                 #region pagination data
                 model.pageHelperObj = new PagerHelper();
@@ -62,20 +59,14 @@ namespace AdminPanel.Controllers
                 model.pageHelperObj = PagerHelper.Instance.MakePaginationObject(model?.AdminPanelNotificationsList?.Count() ?? 0, TotalRecords, _constants.ITEMS_PER_PAGE(), FormData.PageNo);
 
                 #endregion
-
-
-
-
             }
             catch (Exception ex)
             {
                 await this._commonServicesDAL.LogRunTimeExceptionDAL(ex.Message, ex.StackTrace, ex.StackTrace);
-
                 #region error model
                 model.SuccessErrorMsgEntityObj = new SuccessErrorMsgEntity();
                 model.SuccessErrorMsgEntityObj.ErrorMsg = "An error occured. Please try again.";
                 #endregion
-
             }
 
             if (HttpContext.Request.Headers["X-Requested-With"] == "XMLHttpRequest")//if request is ajax
@@ -91,7 +82,6 @@ namespace AdminPanel.Controllers
         [RolesRightsAuthorizationHelper((int)EntitiesEnum.Admin_Notifications, 0, (short)UserRightsEnum.Update, 0, 0, 0)]
         public async Task<IActionResult> MarkAllAdminNotificationsAsRead()
         {
-
             try
             {
                 int UserID = Convert.ToInt32(await this._sessionManag.GetLoginUserIdFromSession());
@@ -105,32 +95,20 @@ namespace AdminPanel.Controllers
                 {
                     return Json(new { success = false, message = result });
                 }
-
-
             }
             catch (Exception ex)
             {
-
                 await this._commonServicesDAL.LogRunTimeExceptionDAL(ex.Message, ex.StackTrace, ex.StackTrace);
-
                 return Json(new { success = false, message = "An error occured on server side.", ExMsg = ex.Message });
             }
-
-
-
-
-
         }
-
 
         [HttpPost]
         [RolesRightsAuthorizationHelper((int)EntitiesEnum.Admin_Notifications, 0, (short)UserRightsEnum.Update, 0, 0, 0)]
         public async Task<IActionResult> MarkOnlySelectedAdminNotificationsAsRead(AdminPanelNotificationEntity FormData)
         {
-
             try
             {
-
                 string ValidationMsg = "Form is valid";
                 List<string> validationList = new List<string>();
 
@@ -159,24 +137,13 @@ namespace AdminPanel.Controllers
                 {
                     return Json(new { success = false, message = result });
                 }
-
-
             }
             catch (Exception ex)
             {
-
                 await this._commonServicesDAL.LogRunTimeExceptionDAL(ex.Message, ex.StackTrace, ex.StackTrace);
-
                 return Json(new { success = false, message = "An error occured on server side.", ExMsg = ex.Message });
             }
-
-
-
-
-
         }
-
-
 
         [HttpGet]
         [RolesRightsAuthorizationHelper((int)EntitiesEnum.Admin_Notifications, 0, 0, 0, (short)UserRightsEnum.View_All, (short)UserRightsEnum.View_Self)]
@@ -187,29 +154,22 @@ namespace AdminPanel.Controllers
 
             try
             {
-
                 AdminPanelNotificationEntity NotificationFormData = new AdminPanelNotificationEntity()
                 {
                     PageNo = 1,
                     PageSize = 20
-
                 };
                 model.AdminPanelNotificationsList = await this._notificationsServicesDAL.GetAdminPanelNotificationsListDAL(NotificationFormData);
-
-
             }
             catch (Exception ex)
             {
                 await this._commonServicesDAL.LogRunTimeExceptionDAL(ex.Message, ex.StackTrace, ex.StackTrace);
-
                 #region error model
                 model.SuccessErrorMsgEntityObj = new SuccessErrorMsgEntity();
                 model.SuccessErrorMsgEntityObj.ErrorMsg = "An error occured. Please try again.";
                 #endregion
             }
-
             return PartialView("~/Views/Notifications/PartialViews/_SiteHeaderNotifications.cshtml", model);
-
         }
 
 
@@ -222,29 +182,20 @@ namespace AdminPanel.Controllers
             int TotalUnreadNotifications = 0;
             try
             {
-
-
                 TotalUnreadNotifications = await this._notificationsServicesDAL.GetHeaderAdminUnreadNotificationsCountDAL();
-
-
             }
             catch (Exception ex)
             {
                 await this._commonServicesDAL.LogRunTimeExceptionDAL(ex.Message, ex.StackTrace, ex.StackTrace);
-
                 #region error model
                 model.SuccessErrorMsgEntityObj = new SuccessErrorMsgEntity();
                 model.SuccessErrorMsgEntityObj.ErrorMsg = "An error occured. Please try again.";
                 #endregion
-
-
                 return Json(new { success = false, total_unread_notifications = 0 });
             }
 
             return Json(new { success = true, total_unread_notifications = TotalUnreadNotifications });
-
         }
-
 
         [HttpGet]
         public async Task<IActionResult> GetHeaderLanguages()
@@ -255,7 +206,6 @@ namespace AdminPanel.Controllers
             model.PageBasicInfoObj.langCode = await _sessionManag.GetLanguageCodeFromSession();
             try
             {
-
                 LanguageEntity languageEntity = new LanguageEntity()
                 {
                     PageNo = 1,
@@ -263,7 +213,6 @@ namespace AdminPanel.Controllers
                 };
                 model.LanguagesList = await this._configurationServicesDAL.GetLanguagesListDAL(languageEntity);
                 model.LanguagesList = model?.LanguagesList?.Where(x => x.IsActive == true).ToList();
-
             }
             catch (Exception ex)
             {
@@ -276,14 +225,11 @@ namespace AdminPanel.Controllers
             }
 
             return PartialView("~/Views/Notifications/PartialViews/_HeaderLangSection.cshtml", model);
-
         }
 
         [HttpPost]
         public async Task<IActionResult> setSelectedLanguageInSession(LanguageEntity FormData)
         {
-
-
             try
             {
                 if (String.IsNullOrWhiteSpace(FormData.LanguageCode))
@@ -292,17 +238,13 @@ namespace AdminPanel.Controllers
                 }
 
                 _sessionManag.SetLanguageCodeInSession(FormData.LanguageCode);
-
                 return Json(new { success = true, message = "Saved Successfully!" });
             }
             catch (Exception ex)
             {
-
                 await this._commonServicesDAL.LogRunTimeExceptionDAL(ex.Message, ex.StackTrace, ex.StackTrace);
-
                 return Json(new { success = false, message = "An error occured on server side.", ExMsg = ex.Message });
             }
         }
-
     }
 }

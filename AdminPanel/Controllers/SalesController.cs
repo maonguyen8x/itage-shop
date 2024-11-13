@@ -11,12 +11,10 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using static Entities.DBInheritedModels.InheritedEntitiesLevelTwo;
 
-
 namespace AdminPanel.Controllers
 {
     public class SalesController : BaseController
     {
-
         private readonly IBasicDataServicesDAL _basicDataDAL;
         private readonly IProductServicesDAL _productServicesDAL;
         private readonly IConstants _constants;
@@ -55,17 +53,14 @@ namespace AdminPanel.Controllers
             model.PageBasicInfoObj.langCode = await _sessionManag.GetLanguageCodeFromSession();
             #endregion
 
-
             try
             {
-
                 OrderStatusesEntity categoryEntityFormData = new OrderStatusesEntity()
                 {
                     PageNo = 1,
                     PageSize = 200
                 };
                 model.OrderStatusesList = await this._salesServicesDAL.GetOrderStatusesList(categoryEntityFormData);
-
 
                 if (FormData.VendorId == null || FormData.VendorId == 0)
                 {
@@ -83,9 +78,6 @@ namespace AdminPanel.Controllers
                     #endregion
                 }
 
-
-
-
                 UserEntity vendorEntityFormData = new UserEntity()
                 {
                     PageNo = 1,
@@ -95,11 +87,8 @@ namespace AdminPanel.Controllers
                 };
                 model.VendorsList = await this._userManagementServicesDAL.GetUsersListDAL(vendorEntityFormData);
 
-
                 FormData.PageSize = this._constants.ITEMS_PER_PAGE();
                 model.OrdersList = await _salesServicesDAL.GetOrdersListDAL(FormData);
-
-
 
                 #region pagination data
                 model.pageHelperObj = new PagerHelper();
@@ -114,12 +103,10 @@ namespace AdminPanel.Controllers
                     var ExcelFileResutl = await this._filesHelpers.ExportToExcel(this, model.PageBasicInfoObj.PageTitle, model.OrdersList.Cast<dynamic?>().ToList());
                     return ExcelFileResutl;
                 }
-
             }
             catch (Exception ex)
             {
                 await this._commonServicesDAL.LogRunTimeExceptionDAL(ex.Message, ex.StackTrace, ex.StackTrace);
-
                 #region error model
                 model.SuccessErrorMsgEntityObj = new SuccessErrorMsgEntity();
                 model.SuccessErrorMsgEntityObj.ErrorMsg = "An error occured. Please try again.";
@@ -149,7 +136,6 @@ namespace AdminPanel.Controllers
             model.PageBasicInfoObj.langCode = await _sessionManag.GetLanguageCodeFromSession();
             #endregion
 
-
             ViewBag.OrderId = OrderId;
 
             try
@@ -168,8 +154,6 @@ namespace AdminPanel.Controllers
                 };
                 model.OrderStatusesList = await this._salesServicesDAL.GetOrderStatusesList(categoryEntityFormData);
 
-
-
                 UserEntity ShipperUsersEntityFormData = new UserEntity()
                 {
                     PageNo = 1,
@@ -179,24 +163,16 @@ namespace AdminPanel.Controllers
                 };
                 model.ShippersList = await this._userManagementServicesDAL.GetUsersListDAL(ShipperUsersEntityFormData);
 
-
                 OrderEntity OrderFormData = new OrderEntity()
                 {
-
                     OrderId = OrderId,
-
                 };
 
 
                 OrderRefundReasonType orderRefundReasonTypeFormData = new OrderRefundReasonType();
                 model.OrderRefundReasonTypesList = await this._salesServicesDAL.GetOrderRefundReasonTypeListDAL(orderRefundReasonTypeFormData);
 
-
-
                 model.OrderObj = await _salesServicesDAL.GetOrderDetailByIdDAL(OrderFormData);
-
-              
-
                 model.OrderShippingDetailList = JsonConvert.DeserializeObject<List<OrderShippingDetailEntity>>(model?.OrderObj?.OrderShippingDetailsDataJson ?? "[]");
                 model.OrderShippingMasterData = JsonConvert.DeserializeObject<UserAddressEntity>(model?.OrderObj?.OrderShippingMasterDataJson ?? "[]");
                 model.OrderItemsList = JsonConvert.DeserializeObject<List<OrderItemEntity>>(model?.OrderObj?.OrdersItemsJson ?? "[]");
@@ -215,7 +191,6 @@ namespace AdminPanel.Controllers
                 }
                 #endregion
                
-
                 OrderNoteEntity OrderNoteFormData = new OrderNoteEntity()
                 {
                     PageNo = 1,
@@ -223,8 +198,6 @@ namespace AdminPanel.Controllers
                     OrderId = OrderId
                 };
                 model.OrderNotesList = await this._salesServicesDAL.GetOrderNotesListDAL(OrderNoteFormData);
-
-
 
                 //#region pagination data
                 //model.pageHelperObj = new PagerHelper();
@@ -238,14 +211,11 @@ namespace AdminPanel.Controllers
             catch (Exception ex)
             {
                 await this._commonServicesDAL.LogRunTimeExceptionDAL(ex.Message, ex.StackTrace, ex.StackTrace);
-
                 #region error model
                 model.SuccessErrorMsgEntityObj = new SuccessErrorMsgEntity();
                 model.SuccessErrorMsgEntityObj.ErrorMsg = "An error occured. Please try again.";
                 #endregion
             }
-
-
             return View(model);
         }
 
@@ -253,7 +223,6 @@ namespace AdminPanel.Controllers
         [RolesRightsAuthorizationHelper((int)EntitiesEnum.OrderDetail, 0, (short)UserRightsEnum.Update, 0, 0, 0)]
         public async Task<IActionResult> UpdateOrderShippingItemsDetail(OrderShippingDetailEntity FormData)
         {
-
             try
             {
                 // ✅ Main Model
@@ -289,21 +258,12 @@ namespace AdminPanel.Controllers
                 {
                     return Json(new { success = false, message = result });
                 }
-
-
             }
             catch (Exception ex)
             {
-
                 await this._commonServicesDAL.LogRunTimeExceptionDAL(ex.Message, ex.StackTrace, ex.StackTrace);
-
                 return Json(new { success = false, message = "An error occured on server side.", ExMsg = ex.Message });
             }
-
-
-
-
-
         }
 
 
@@ -311,7 +271,6 @@ namespace AdminPanel.Controllers
         [RolesRightsAuthorizationHelper((int)EntitiesEnum.OrderDetail, 0, (short)UserRightsEnum.Update, 0, 0, 0)]
         public async Task<IActionResult> SaveOrderNoteReply(OrderNoteEntity FormData)
         {
-
             try
             {
                 // ✅ Main Model
@@ -347,23 +306,13 @@ namespace AdminPanel.Controllers
                 {
                     return Json(new { success = false, message = result });
                 }
-
-
             }
             catch (Exception ex)
             {
-
                 await this._commonServicesDAL.LogRunTimeExceptionDAL(ex.Message, ex.StackTrace, ex.StackTrace);
-
                 return Json(new { success = false, message = "An error occured on server side.", ExMsg = ex.Message });
             }
-
-
-
-
-
         }
-
 
         [HttpGet]
         [RolesRightsAuthorizationHelper((int)EntitiesEnum.OrderDetail, 0, 0, 0, (short)UserRightsEnum.View_All, (short)UserRightsEnum.View_Self)]
@@ -374,7 +323,6 @@ namespace AdminPanel.Controllers
 
             try
             {
-
                 OrderNoteEntity OrderNoteFormData = new OrderNoteEntity()
                 {
                     PageNo = 1,
@@ -382,13 +330,10 @@ namespace AdminPanel.Controllers
                     OrderId = FormData.OrderId
                 };
                 model.OrderNotesList = await this._salesServicesDAL.GetOrderNotesListDAL(OrderNoteFormData);
-
-
             }
             catch (Exception ex)
             {
                 await this._commonServicesDAL.LogRunTimeExceptionDAL(ex.Message, ex.StackTrace, ex.StackTrace);
-
                 #region error model
                 model.SuccessErrorMsgEntityObj = new SuccessErrorMsgEntity();
                 model.SuccessErrorMsgEntityObj.ErrorMsg = "An error occured. Please try again.";
@@ -396,14 +341,12 @@ namespace AdminPanel.Controllers
             }
 
             return PartialView("~/Views/Sales/PartialViews/_OrderNoteMessages.cshtml", model);
-
         }
 
         [HttpPost]
         [RolesRightsAuthorizationHelper((int)EntitiesEnum.OrdersList, 0, (short)UserRightsEnum.Update, 0, 0, 0)]
         public async Task<IActionResult> UpdateOrderStatus(int OrderId, int LatestStatusId)
         {
-
             try
             {
                 // ✅ Main Model
@@ -425,8 +368,8 @@ namespace AdminPanel.Controllers
                 #endregion
 
                 int UserId = Convert.ToInt32(await this._sessionManag.GetLoginUserIdFromSession());
-
                 string result = await _salesServicesDAL.UpdateOrderStatusDAL(OrderId, LatestStatusId, UserId);
+
                 if (!String.IsNullOrWhiteSpace(result) && result == "Saved Successfully!")
                 {
                     return Json(new { success = true, message = "Saved Successfully!" });
@@ -435,23 +378,13 @@ namespace AdminPanel.Controllers
                 {
                     return Json(new { success = false, message = result });
                 }
-
-
             }
             catch (Exception ex)
             {
-
                 await this._commonServicesDAL.LogRunTimeExceptionDAL(ex.Message, ex.StackTrace, ex.StackTrace);
-
                 return Json(new { success = false, message = "An error occured on server side.", ExMsg = ex.Message });
             }
-
-
-
-
-
         }
-
 
         [HttpGet]
         public async Task<IActionResult> showOrterItemVariants(int OrderId, int OrderItemId)
@@ -466,25 +399,17 @@ namespace AdminPanel.Controllers
                 {
                     model.OrderVariantsList = model.OrderVariantsList.Where(x=>x.OrderItemID==OrderItemId).ToList();
                 }
-
             }
             catch (Exception ex)
             {
                 await this._commonServicesDAL.LogRunTimeExceptionDAL(ex.Message, ex.StackTrace, ex.StackTrace);
-
                 #region error model
                 model.SuccessErrorMsgEntityObj = new SuccessErrorMsgEntity();
                 model.SuccessErrorMsgEntityObj.ErrorMsg = "An error occured. Please try again.";
                 #endregion
-
             }
 
-          
             return PartialView("~/Views/Sales/PartialViews/_OrderItemVariants.cshtml", model);
         }
-
-
-       
-
     }
 }
