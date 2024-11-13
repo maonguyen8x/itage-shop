@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "TL3bWtNEEig=",
+  "dgSpecHash": "hw5hdkYdv2g=",
   "success": true,
-  "projectFilePath": "D:\\Code\\ecommerce\\.NET 8 Version - Latest\\project\\NoorECommerce\\DAL\\DAL.csproj",
+  "projectFilePath": "D:\\Code\\itage-shop\\DAL\\DAL.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\User\\.nuget\\packages\\azure.core\\1.35.0\\azure.core.1.35.0.nupkg.sha512",
     "C:\\Users\\User\\.nuget\\packages\\azure.identity\\1.10.3\\azure.identity.1.10.3.nupkg.sha512",

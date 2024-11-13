@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "kqoDINiV9P8=",
+  "dgSpecHash": "L5zHM4mKBBA=",
   "success": true,
-  "projectFilePath": "D:\\Code\\ecommerce\\.NET 8 Version - Latest\\project\\NoorECommerce\\Entities\\Entities.csproj",
+  "projectFilePath": "D:\\Code\\itage-shop\\Entities\\Entities.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\User\\.nuget\\packages\\azure.core\\1.35.0\\azure.core.1.35.0.nupkg.sha512",
     "C:\\Users\\User\\.nuget\\packages\\azure.identity\\1.10.3\\azure.identity.1.10.3.nupkg.sha512",
