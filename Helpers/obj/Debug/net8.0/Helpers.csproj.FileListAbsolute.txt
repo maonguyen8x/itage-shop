@@ -34,3 +34,21 @@ D:\Code\ecommerce\.NET 8 Version - Latest\project\NoorECommerce\Helpers\obj\Debu
 D:\Code\ecommerce\.NET 8 Version - Latest\project\NoorECommerce\Helpers\obj\Debug\net8.0\refint\Helpers.dll
 D:\Code\ecommerce\.NET 8 Version - Latest\project\NoorECommerce\Helpers\obj\Debug\net8.0\Helpers.pdb
 D:\Code\ecommerce\.NET 8 Version - Latest\project\NoorECommerce\Helpers\obj\Debug\net8.0\ref\Helpers.dll
+D:\Code\itage-shop\Helpers\bin\Debug\net8.0\Helpers.deps.json
+D:\Code\itage-shop\Helpers\bin\Debug\net8.0\Helpers.dll
+D:\Code\itage-shop\Helpers\bin\Debug\net8.0\Helpers.pdb
+D:\Code\itage-shop\Helpers\bin\Debug\net8.0\DAL.dll
+D:\Code\itage-shop\Helpers\bin\Debug\net8.0\Entities.dll
+D:\Code\itage-shop\Helpers\bin\Debug\net8.0\DAL.pdb
+D:\Code\itage-shop\Helpers\bin\Debug\net8.0\Entities.pdb
+D:\Code\itage-shop\Helpers\obj\Debug\net8.0\Helpers.csproj.AssemblyReference.cache
+D:\Code\itage-shop\Helpers\obj\Debug\net8.0\Helpers.GeneratedMSBuildEditorConfig.editorconfig
+D:\Code\itage-shop\Helpers\obj\Debug\net8.0\Helpers.AssemblyInfoInputs.cache
+D:\Code\itage-shop\Helpers\obj\Debug\net8.0\Helpers.AssemblyInfo.cs
+D:\Code\itage-shop\Helpers\obj\Debug\net8.0\Helpers.csproj.CoreCompileInputs.cache
+D:\Code\itage-shop\Helpers\obj\Debug\net8.0\Helpers.sourcelink.json
+D:\Code\itage-shop\Helpers\obj\Debug\net8.0\Helpers.csproj.Up2Date
+D:\Code\itage-shop\Helpers\obj\Debug\net8.0\Helpers.dll
+D:\Code\itage-shop\Helpers\obj\Debug\net8.0\refint\Helpers.dll
+D:\Code\itage-shop\Helpers\obj\Debug\net8.0\Helpers.pdb
+D:\Code\itage-shop\Helpers\obj\Debug\net8.0\ref\Helpers.dll

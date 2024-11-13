@@ -348,7 +348,6 @@ const Footer = ({ layoutLogo }) => {
                         <i className="fa fa-youtube-play"></i>
                       </Link>
                     </li>
-
                   </ul>
                 </div>
               </div>

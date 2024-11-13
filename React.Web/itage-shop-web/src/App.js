@@ -27,7 +27,7 @@ function App() {
                 if (document.body?.classList.contains("ltr")) {
                     document.body.classList.add("rtl");
                     document.body.classList.remove("ltr");
-                  }
+                }
             } else {
                 document.documentElement.lang = Config.LANG_CODES_ENUM["English"];
                 document.body.classList.add("ltr");
@@ -45,7 +45,6 @@ function App() {
               <RouteConfig />
           </PersistGate>
       </Provider>
-
   );
 }
 
