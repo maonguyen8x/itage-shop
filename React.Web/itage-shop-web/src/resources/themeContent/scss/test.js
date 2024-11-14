@@ -1,1 +1,0 @@
-import noor from '../fonts/'
