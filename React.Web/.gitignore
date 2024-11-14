@@ -1,0 +1,14 @@
+.env
+.env.prod
+.env.dev
+dist/
+bin/
+obj/
+package-lock.json
+debug.log
+
+appsettings.json
+
+../.vs/
+.vs/
+../.vs/
